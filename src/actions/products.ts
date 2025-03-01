@@ -24,6 +24,14 @@ export const createProduct = async (values: {
       },
     });
 
+    await db.logs.create({
+      data: {
+        action: `Created product ${
+          values.name
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Product created successfully." };
   } catch (error) {
     console.error(error);
@@ -57,6 +65,14 @@ export const updateProduct = async (
       },
     });
 
+    await db.logs.create({
+      data: {
+        action: `Updated product ${
+          values.name
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Product updated successfully." };
   } catch (error) {
     console.error(error);
@@ -66,7 +82,15 @@ export const updateProduct = async (
 
 export const deleteProduct = async (id: string) => {
   try {
-    await db.products.delete({ where: { id } });
+    const products = await db.products.delete({ where: { id } });
+
+    await db.logs.create({
+      data: {
+        action: `Deleted product ${
+          products.name
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
 
     return { success: "Product deleted successfully." };
   } catch (error) {

@@ -50,6 +50,14 @@ export const createPromotion = async (data: {
       },
     });
 
+    await db.logs.create({
+      data: {
+        action: `Created promotion ${
+          data.name
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Promotion created successfully" };
   } catch (error) {
     console.error(error);
@@ -131,6 +139,14 @@ export const updatePromotion = async (
       },
     });
 
+    await db.logs.create({
+      data: {
+        action: `Updated promotion ${
+          data.name
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Promotion updated successfully" };
   } catch (error) {
     console.error(error);
@@ -162,6 +178,14 @@ export const deletePromotion = async (id: string) => {
     await db.promotions.delete({
       where: {
         id,
+      },
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Deleted promotion ${
+          promotion.name
+        } at ${new Date().toLocaleString()}`,
       },
     });
 

@@ -57,10 +57,6 @@ const data = {
           title: "Blogs",
           url: "/admin/blogs",
         },
-        {
-          title: "News & Events",
-          url: "/admin/news-events",
-        },
       ],
     },
     {

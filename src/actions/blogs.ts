@@ -12,6 +12,14 @@ export const createBlog = async (values: {
       data: values,
     });
 
+    await db.logs.create({
+      data: {
+        action: `Created blog ${
+          values.title
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Blog created successfully." };
   } catch (error) {
     console.error(error);
@@ -31,6 +39,14 @@ export const updateBlog = async (
       data: values,
     });
 
+    await db.logs.create({
+      data: {
+        action: `Updated blog ${
+          values.title
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Blog updated successfully." };
   } catch (error) {
     console.error(error);
@@ -40,9 +56,15 @@ export const updateBlog = async (
 
 export const deleteBlog = async (id: string) => {
   try {
-    await db.blogs.delete({
+    const blog = await db.blogs.delete({
       where: {
         id,
+      },
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Deleted blog ${blog.title} at ${new Date().toLocaleString()}`,
       },
     });
 

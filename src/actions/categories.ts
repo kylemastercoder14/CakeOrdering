@@ -12,6 +12,14 @@ export const createCategory = async (values: {
       data: values,
     });
 
+    await db.logs.create({
+      data: {
+        action: `Created category ${
+          values.name
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Category created successfully." };
   } catch (error) {
     console.error(error);
@@ -31,6 +39,14 @@ export const updateCategory = async (
       data: values,
     });
 
+    await db.logs.create({
+      data: {
+        action: `Updated category ${
+          values.name
+        } at ${new Date().toLocaleString()}`,
+      },
+    });
+
     return { success: "Category updated successfully." };
   } catch (error) {
     console.error(error);
@@ -40,9 +56,17 @@ export const updateCategory = async (
 
 export const deleteCategory = async (id: string) => {
   try {
-    await db.categories.delete({
+    const categories = await db.categories.delete({
       where: {
         id,
+      },
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Deleted category ${
+          categories.name
+        } at ${new Date().toLocaleString()}`,
       },
     });
 
