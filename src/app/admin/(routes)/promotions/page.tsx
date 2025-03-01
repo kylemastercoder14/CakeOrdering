@@ -14,7 +14,7 @@ const Page = async () => {
     },
     include: {
       products: true,
-    }
+    },
   });
 
   const formattedData: PromotionColumn[] =
