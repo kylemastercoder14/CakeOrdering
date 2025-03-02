@@ -1,9 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const Admin = () => {
+  const router = useRouter();
   return (
     <div className="relative w-full flex items-center justify-center h-screen bg-[#77AD77] p-5">
       <div className="bg-[#CCE3AD] flex flex-col items-center justify-center border border-[#452E19] pb-16 p-5 lg:w-1/2 w-full rounded-[50px] shadow-xl">
@@ -27,7 +32,18 @@ const Admin = () => {
               className="border-t-0 border-b border-[#452E19] outline-none bg-transparent"
             />
           </div>
-          <Button className="w-full mt-10">Login</Button>
+          <Button
+            type="button"
+            onClick={() => {
+              toast.success("Login successful");
+              setTimeout(() => {
+                router.push("/admin/dashboard");
+              }, 1500);
+            }}
+            className="w-full mt-10"
+          >
+            Login
+          </Button>
         </form>
       </div>
     </div>

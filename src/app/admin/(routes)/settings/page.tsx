@@ -5,7 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import PersonalSettingsForm from "@/components/forms/personal-settings-form";
 import PasswordSettingsForm from "@/components/forms/password-settings-form";
-import AboutSettingsForm from '@/components/forms/about-settings-form';
+import AboutSettingsForm from "@/components/forms/about-settings-form";
+import ContactSettingsForm from "@/components/forms/contact-settings-form";
+import SocialsSettingsForm from '@/components/forms/socials-settings-form';
 
 const Page = async () => {
   const personalInfo = await db.admin.findFirst({
@@ -17,6 +19,15 @@ const Page = async () => {
   const aboutInfo = await db.about.findFirst({
     orderBy: {
       createdAt: "desc",
+    },
+  });
+
+  const contactInfo = await db.contact.findFirst({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      socials: true,
     },
   });
   return (
@@ -39,9 +50,12 @@ const Page = async () => {
             <Separator className="my-7" />
             <AboutSettingsForm initialData={aboutInfo} />
           </TabsContent>
-          <TabsContent value="contact">Change your password here.</TabsContent>
-          <TabsContent value="faqs">Change your password here.</TabsContent>
-          <TabsContent value="policies">Change your password here.</TabsContent>
+          <TabsContent value="contact">
+            <ContactSettingsForm initialData={contactInfo} />
+            <SocialsSettingsForm initialData={contactInfo} />
+          </TabsContent>
+          <TabsContent value="faqs">FAQs here.</TabsContent>
+          <TabsContent value="policies">Policies here.</TabsContent>
         </Tabs>
       </div>
     </div>

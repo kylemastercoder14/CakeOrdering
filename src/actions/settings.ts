@@ -111,3 +111,75 @@ export const updateStoreInfo = async (
     return { error: "An error occurred while updating the store information." };
   }
 };
+
+export const updateContactInfo = async (
+  values: {
+    email: string;
+    phone: string;
+    googleMapUrl: string;
+  },
+  id: string
+) => {
+  try {
+    await db.contact.update({
+      data: {
+        email: values.email,
+        phone: values.phone,
+        googleMapUrl: values.googleMapUrl,
+      },
+      where: {
+        id,
+      },
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Updated contact info ${id} at ${new Date().toLocaleString()}`,
+      },
+    });
+
+    return { success: "Contact information updated." };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "An error occurred while updating the contact information.",
+    };
+  }
+};
+
+export const updateSocialsInfo = async (
+  socials: {
+    platform: string;
+    url: string;
+  }[],
+  id: string
+) => {
+  try {
+    await db.socials.deleteMany({
+      where: {
+        contactId: id,
+      },
+    });
+
+    await db.socials.createMany({
+      data: socials.map((social) => ({
+        platform: social.platform,
+        url: social.url,
+        contactId: id,
+      })),
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Updated socials info ${id} at ${new Date().toLocaleString()}`,
+      },
+    });
+
+    return { success: "Social information updated." };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "An error occurred while updating the social information.",
+    };
+  }
+};

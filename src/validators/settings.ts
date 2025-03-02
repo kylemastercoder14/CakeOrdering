@@ -25,3 +25,12 @@ export const StoreInfoValidation = z.object({
   coreValues: z.string().min(1, { message: "Core values is required" }),
   about: z.string().min(1, { message: "About is required" }),
 });
+
+export const ContactInfoValidation = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email address" }),
+  phone: z.string().min(1, { message: "Phone number is required" }),
+  googleMapUrl: z.string().min(1, { message: "Google map is required" }),
+});
