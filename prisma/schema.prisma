@@ -75,3 +75,73 @@ model Logs {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Admin {
+  id        String @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  password  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model About {
+  id         String @id @default(cuid())
+  storeName  String
+  imageUrl   String
+  mission    String
+  vision     String
+  coreValues String
+  logo       String
+  content    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contact {
+  id           String @id @default(cuid())
+  email        String
+  phone        String
+  googleMapUrl String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  socials Socials[]
+}
+
+model Socials {
+  id       String @id @default(cuid())
+  platform String
+  url      String
+  icon     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contactId String
+  contact   Contact @relation(fields: [contactId], references: [id])
+
+  @@index([contactId])
+}
+
+model Faqs {
+  id       String @id @default(cuid())
+  question String
+  answer   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Policies {
+  id      String @id @default(cuid())
+  title   String
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

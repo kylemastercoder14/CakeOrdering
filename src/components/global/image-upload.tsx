@@ -11,11 +11,13 @@ const ImageUpload = ({
   endpoint,
   disabled,
   initialImage,
+  className
 }: {
   onChange: (url?: string) => void;
   endpoint: keyof typeof ourFileRouter;
   disabled?: boolean;
   initialImage?: string; // Accept initial image URL
+  className?: string;
 }) => {
   const [preview, setPreview] = useState<string | null>(initialImage || null);
   const [isEditing, setIsEditing] = useState(false);
@@ -48,7 +50,7 @@ const ImageUpload = ({
         </div>
       ) : (
         <UploadDropzone
-          className="w-full"
+          className={className}
           disabled={disabled}
           endpoint={endpoint}
           onClientUploadComplete={handleUploadComplete}
