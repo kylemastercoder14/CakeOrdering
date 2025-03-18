@@ -11,6 +11,7 @@ const CakePreview = ({ loading, generatedImage }: { loading: boolean; generatedI
         {loading ? (
           <div className="text-center text-gray-500">Generating cake preview...</div>
         ) : generatedImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={generatedImage}
             alt="Generated Cake Preview"
