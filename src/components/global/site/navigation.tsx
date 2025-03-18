@@ -12,12 +12,17 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { UserButton, useUser } from "@clerk/nextjs";
+import useCart from '@/hooks/use-cart';
 
 const Navigation = () => {
+  const {items} = useCart();
+  const { user } = useUser();
   const pathname = usePathname();
+  const router = useRouter();
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const lastScrollTop = useRef(0);
@@ -55,7 +60,7 @@ const Navigation = () => {
         </Link>
         {/* Desktop Navigation */}
         <ul className="lg:flex hidden gap-5">
-          {["/", "/about", "/products", "/blogs", "/contact-us"].map(
+          {["/", "/about-us", "/products", "/blogs", "/contact-us"].map(
             (route, index) => (
               <li key={index}>
                 <Link
@@ -130,10 +135,17 @@ const Navigation = () => {
 
       {/* Buttons */}
       <div className="flex items-center">
-        <Button>Create an account</Button>
+        {user ? (
+          <UserButton showName />
+        ) : (
+          <Button onClick={() => router.push("/sign-up")}>
+            Create an account
+          </Button>
+        )}
         <p className="mr-3 ml-5">|</p>
-        <Button className="rounded-full" variant="default" size="icon">
-          <ShoppingCart className="size-4" />
+        <Button onClick={() => router.push("/cart")} className="rounded-full relative" variant="default" size="icon">
+          <p className='absolute -top-1 text-[8px] -right-1 bg-red-600 rounded-full size-4 flex items-center justify-center'>{items.length}</p>
+          <ShoppingCart className="size-2" />
         </Button>
       </div>
     </nav>
