@@ -30,7 +30,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 
-const ChatBot = ({userId}: {userId: string | null;}) => {
+const ChatBot = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [showChatIcon, setShowChatIcon] = useState(false);
