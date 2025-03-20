@@ -3,7 +3,7 @@
 import React from "react";
 import { Search } from "lucide-react";
 
-const SearchBox = () => {
+const SearchBox = ({ onSearch }: { onSearch: (query: string) => void }) => {
   return (
     <div className="relative flex items-center justify-center mt-10">
       {/* Search Input */}
@@ -12,6 +12,7 @@ const SearchBox = () => {
           type="text"
           className="bg-transparent border-none outline-none text-sm w-full"
           placeholder="Search any products here..."
+          onChange={(e) => onSearch(e.target.value)}
         />
         <button className="rounded-full py-2 px-4">
           <Search className="w-4 h-4 text-muted-foreground" />

@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
         hostname: "bqc19l1fhj.ufs.sh",
       },
       { hostname: "s3-alpha-sig.figma.com" },
+      { hostname: "cdn.shopify.com" },
+      { hostname: "i.pinimg.com" },
     ],
   },
   eslint: {

@@ -15,13 +15,12 @@ import { Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/global/site/footer";
 import { useRouter } from "next/navigation";
-import { createPayment } from "@/lib/xendit";
+import { useUser } from "@clerk/nextjs";
 
 const Page = () => {
+  const { isSignedIn } = useUser();
   const router = useRouter();
   const { items, removeItem, updateQuantity, removeAll } = useCart();
-  const [invoiceUrl, setInvoiceUrl] = React.useState("");
-  const orderNumber = `MarianHomeBakeShop-${Date.now()}`;
   const handleIncrement = (id: string, currentQuantity: number) => {
     updateQuantity(id, currentQuantity + 1);
   };
@@ -36,22 +35,6 @@ const Page = () => {
     (acc, item) => acc + item.price * item.quantity,
     0
   );
-
-  const handlePayment = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const paymentData = {
-      external_id: orderNumber,
-      amount: totalPrice,
-      payer_email: "kylemastercoder14@gmail.com",
-      description: `Payment for ${items.map((item) => item.name).join(", ")}`,
-      currency: "PHP",
-      success_redirect_url: `http://localhost:3000/success?order=${orderNumber}`,
-      failure_redirect_url: "http://localhost:3000/failure",
-    };
-
-    const payment = await createPayment(paymentData);
-    setInvoiceUrl(payment.invoice_url);
-  };
 
   return (
     <div className="h-screen">
@@ -158,22 +141,17 @@ const Page = () => {
             <p className="text-xl font-semibold">₱ {totalPrice.toFixed(2)}</p>
           </div>
           <div className="flex items-center gap-2">
-            {invoiceUrl ? (
-              <a
-                href={invoiceUrl}
-                rel="noopener noreferrer"
-                className="text-red-800 text-sm font-semibold hover:underline"
-              >
-                Click here if you are not redirected
-              </a>
-            ) : (
-              <Button disabled={invoiceUrl !== ""} onClick={handlePayment}>
-                {invoiceUrl
-                  ? "Payment successful! Redirecting to payment page..."
-                  : "Checkout"}
-              </Button>
-            )}
-
+            <Button
+              onClick={() => {
+                if (isSignedIn) {
+                  router.push("/checkout");
+                } else {
+                  router.push("/sign-in");
+                }
+              }}
+            >
+              Checkout
+            </Button>
             <Button variant="destructive" onClick={removeAll}>
               Delete Cart
             </Button>

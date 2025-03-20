@@ -9,10 +9,10 @@ datasource db {
 }
 
 model Users {
-  id          String @id @default(cuid())
+  id          String  @id @default(cuid())
   clerkId     String
   name        String
-  email       String @unique
+  email       String  @unique
   password    String?
   address     String?
   phoneNumber String?
@@ -22,6 +22,7 @@ model Users {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Orders    Orders[]
 }
 
 model Categories {
@@ -37,13 +38,13 @@ model Categories {
 }
 
 model Products {
-  id          String  @id @default(cuid())
-  name        String
-  description String
-  price       Float
-  imageUrl    String
-  isFeatured  Boolean @default(true)
-  status      String  @default("In stock")
+  id           String  @id @default(cuid())
+  name         String
+  description  String
+  price        Float
+  imageUrl     String
+  isFeatured   Boolean @default(true)
+  status       String  @default("In stock")
   isCustomized Boolean @default(false)
 
   categoryId String
@@ -52,11 +53,53 @@ model Products {
   promotionId String?
   promotion   Promotions? @relation(fields: [promotionId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  OrderItems OrderItems[]
 
   @@index([categoryId])
   @@index([promotionId])
+}
+
+model Orders {
+  id             String  @id @default(cuid())
+  name           String
+  address        String
+  orderNumber    String
+  totalAmount    Float
+  orderStatus    String  @default("Pending")
+  deliveryStatus String  @default("Pending")
+  paymentStatus  String  @default("Pending")
+  message        String?
+  shippingOption String
+  shippingFee    Float
+
+  userId String
+  user   Users  @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderItems OrderItems[]
+
+  @@index([userId])
+}
+
+model OrderItems {
+  id        String @id @default(cuid())
+  quantity  Int
+  subTotal  Float
+  productId String
+  orderId   String
+
+  product Products @relation(fields: [productId], references: [id])
+  order   Orders   @relation(fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([orderId])
 }
 
 model Promotions {
@@ -157,6 +200,17 @@ model Policies {
   id      String @id @default(cuid())
   title   String
   content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id      String @id @default(cuid())
+  name    String
+  email   String
+  subject String
+  message String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

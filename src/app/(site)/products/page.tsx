@@ -7,6 +7,7 @@ const Page = async () => {
   const products = await db.products.findMany({
     include: {
       category: true,
+      OrderItems: true,
     },
   });
   const categories = await db.categories.findMany();

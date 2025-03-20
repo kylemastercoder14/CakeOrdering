@@ -11,10 +11,10 @@ const ProductCatalog = async () => {
       <h1 className="text-center text-4xl font-sans text-[#251201] font-bold">
         Product Catalog
       </h1>
-      <div className="mt-10 grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-5">
+      <div className="mt-10 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
         {data.map((category) => (
           <div key={category.id} className='flex flex-col items-center justify-center gap-3'>
-            <div className="relative w-full h-80">
+            <div className="relative w-full h-96">
               <Image
                 src={category.imageUrl}
                 alt={category.name}

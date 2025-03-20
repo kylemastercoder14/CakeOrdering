@@ -30,8 +30,8 @@ const Footer = () => {
           <Link className="hover:underline" href="/product-catalog">
             Product Catalog
           </Link>
-          <Link className="hover:underline" href="/checkout">
-            Payments
+          <Link className="hover:underline" href="/order-history">
+            Order History
           </Link>
         </div>
         <div className="flex flex-col space-y-2">
