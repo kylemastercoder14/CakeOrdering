@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       { hostname: "s3-alpha-sig.figma.com" },
       { hostname: "cdn.shopify.com" },
       { hostname: "i.pinimg.com" },
+      { hostname: "erp-ncst.s3.us-east-1.amazonaws.com" },
     ],
   },
   eslint: {

@@ -5,6 +5,7 @@ import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
@@ -15,7 +16,9 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
+import { NavUser } from "./nav-user";
+import { Admin } from "@prisma/client";
 
 const data = {
   navMain: [
@@ -64,6 +67,10 @@ const data = {
       url: "#",
       items: [
         {
+          title: "Manage Staff",
+          url: "/admin/manage-staff",
+        },
+        {
           title: "Settings",
           url: "/admin/settings",
         },
@@ -80,14 +87,36 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-	const pathname = usePathname();
+const riderData = {
+  navMain: [
+    {
+      title: "General",
+      url: "#",
+      items: [
+        {
+          title: "Order Management",
+          url: "/admin/order-management",
+        },
+      ],
+    },
+  ],
+};
+
+export function AppSidebar({
+  staff,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & { staff: Admin }) {
+  const pathname = usePathname();
   return (
     <Sidebar variant="floating" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className='hover:bg-[#47301B] hover:text-white' size="lg" asChild>
+            <SidebarMenuButton
+              className="hover:bg-[#47301B] hover:text-white"
+              size="lg"
+              asChild
+            >
               <a href="/admin/dashboard">
                 <div className="relative w-10 h-10">
                   <Image
@@ -101,7 +130,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="font-semibold">
                     {"Marian's"} Homebakeshop
                   </span>
-                  <span className="">Admin Panel</span>
+                  <span className="">
+                    {staff.role === "Rider" ? "Rider Panel" : "Admin Panel"}
+                  </span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -110,30 +141,70 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="gap-2">
-            {data.navMain.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton className='hover:bg-[#47301B] hover:text-white pointer-events-none font-semibold' asChild>
-                  <a href={item.url} className="font-medium">
-                    {item.title}
-                  </a>
-                </SidebarMenuButton>
-                {item.items?.length ? (
-                  <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={pathname === item.url}>
-                          <a href={item.url}>{item.title}</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+          {staff.role === "Rider" ? (
+            <SidebarMenu className="gap-2">
+              {riderData.navMain.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    className="hover:bg-[#47301B] hover:text-white pointer-events-none font-semibold"
+                    asChild
+                  >
+                    <a href={item.url} className="font-medium">
+                      {item.title}
+                    </a>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={pathname === item.url}
+                          >
+                            <a href={item.url}>{item.title}</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          ) : (
+            <SidebarMenu className="gap-2">
+              {data.navMain.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    className="hover:bg-[#47301B] hover:text-white pointer-events-none font-semibold"
+                    asChild
+                  >
+                    <a href={item.url} className="font-medium">
+                      {item.title}
+                    </a>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={pathname === item.url}
+                          >
+                            <a href={item.url}>{item.title}</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          )}
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser staff={staff} />
+      </SidebarFooter>
     </Sidebar>
   );
 }

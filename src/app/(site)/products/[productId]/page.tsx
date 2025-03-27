@@ -19,9 +19,9 @@ const Page = async (props: { params: Promise<{ productId: string }> }) => {
       <div className="pt-24 lg:px-[200px] px-10">
         <ProductDetails product={product} />
       </div>
-      <div className='pb-24'>
-	  <Feature />
-	  </div>
+      <div className="pb-24">
+        <Feature />
+      </div>
       <Footer />
     </>
   );

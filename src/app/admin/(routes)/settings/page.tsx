@@ -7,7 +7,9 @@ import PersonalSettingsForm from "@/components/forms/personal-settings-form";
 import PasswordSettingsForm from "@/components/forms/password-settings-form";
 import AboutSettingsForm from "@/components/forms/about-settings-form";
 import ContactSettingsForm from "@/components/forms/contact-settings-form";
-import SocialsSettingsForm from '@/components/forms/socials-settings-form';
+import SocialsSettingsForm from "@/components/forms/socials-settings-form";
+import FaqSettingsForm from "@/components/forms/faq-settings-form";
+import PoliciesSettingsForm from "@/components/forms/policies-settings-form";
 
 const Page = async () => {
   const personalInfo = await db.admin.findFirst({
@@ -28,6 +30,18 @@ const Page = async () => {
     },
     include: {
       socials: true,
+    },
+  });
+
+  const faqInfo = await db.faqs.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  const policies = await db.policies.findMany({
+    orderBy: {
+      createdAt: "desc",
     },
   });
   return (
@@ -54,8 +68,12 @@ const Page = async () => {
             <ContactSettingsForm initialData={contactInfo} />
             <SocialsSettingsForm initialData={contactInfo} />
           </TabsContent>
-          <TabsContent value="faqs">FAQs here.</TabsContent>
-          <TabsContent value="policies">Policies here.</TabsContent>
+          <TabsContent value="faqs">
+            <FaqSettingsForm initialData={faqInfo} />
+          </TabsContent>
+          <TabsContent value="policies">
+            <PoliciesSettingsForm initialData={policies} />
+          </TabsContent>
         </Tabs>
       </div>
     </div>

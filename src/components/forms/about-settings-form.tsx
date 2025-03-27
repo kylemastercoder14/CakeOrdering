@@ -105,11 +105,8 @@ const AboutSettingsForm = ({ initialData }: { initialData: About | null }) => {
                       <FormItem>
                         <FormControl>
                           <ImageUpload
-                            className="max-w-sm"
-                            disabled={isSubmitting}
-                            endpoint="image"
-                            onChange={field.onChange}
-                            initialImage={initialData?.logo}
+                            defaultValue={field.value || ""}
+                            onImageUpload={(url) => field.onChange(url)}
                           />
                         </FormControl>
                         <FormMessage />
@@ -218,10 +215,8 @@ const AboutSettingsForm = ({ initialData }: { initialData: About | null }) => {
                   </FormLabel>
                   <FormControl>
                     <ImageUpload
-                      disabled={isSubmitting}
-                      endpoint="image"
-                      onChange={field.onChange}
-                      initialImage={initialData?.imageUrl}
+                      defaultValue={field.value || ""}
+                      onImageUpload={(url) => field.onChange(url)}
                     />
                   </FormControl>
                   <FormMessage />

@@ -183,3 +183,61 @@ export const updateSocialsInfo = async (
     };
   }
 };
+
+export const updateFaqsInfo = async (
+  faqs: {
+    question: string;
+    answer: string;
+  }[]
+) => {
+  try {
+    await db.faqs.createMany({
+      data: faqs.map((faq) => ({
+        question: faq.question,
+        answer: faq.answer,
+      })),
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Updated faqs info at ${new Date().toLocaleString()}`,
+      },
+    });
+
+    return { success: "Faqs information updated." };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "An error occurred while updating the faqs information.",
+    };
+  }
+};
+
+export const updatePoliciesInfo = async (
+  policies: {
+    title: string;
+    content: string;
+  }[]
+) => {
+  try {
+    await db.policies.createMany({
+      data: policies.map((policy) => ({
+        title: policy.title,
+        content: policy.content,
+      })),
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Updated policies info at ${new Date().toLocaleString()}`,
+      },
+    });
+
+    return { success: "Policies information updated." };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "An error occurred while updating the policies information.",
+    };
+  }
+};

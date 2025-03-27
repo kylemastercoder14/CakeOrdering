@@ -18,7 +18,7 @@ const Feature = async () => {
       <div className="mt-10 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
         {data.map((product) => (
           <Link
-            href={`/product/${product.id}`}
+            href={`/products/${product.id}`}
             key={product.id}
             className="relative w-full h-96"
           >

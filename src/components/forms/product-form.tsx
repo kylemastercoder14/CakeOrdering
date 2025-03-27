@@ -228,10 +228,8 @@ const ProductForm = ({
                   </FormLabel>
                   <FormControl>
                     <ImageUpload
-                      disabled={isSubmitting}
-                      endpoint="image"
-                      onChange={field.onChange}
-                      initialImage={initialData?.imageUrl}
+                      defaultValue={field.value || ""}
+                      onImageUpload={(url) => field.onChange(url)}
                     />
                   </FormControl>
                   <FormMessage />
