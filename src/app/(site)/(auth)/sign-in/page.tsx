@@ -46,7 +46,7 @@ const Page = () => {
 		Continue with Google
 	  </Button>
 	  <p className="mt-5 mb-5">OR</p>
-	  <div className="bg-white shadow w-1/2 p-5 rounded-md">
+	  <div className="bg-white shadow lg:w-1/2 w-full p-5 rounded-md">
 		<h2 className="text-xl font-semibold">Welcome back</h2>
 		<SigninForm />
 	  </div>
