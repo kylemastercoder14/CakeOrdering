@@ -1,0 +1,649 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { differenceInHours, format } from "date-fns";
+import { Modal } from "@/components/ui/modal";
+import { toast } from "sonner";
+import { useRouter } from 'next/navigation';
+import { cancelOrder } from '@/actions/order';
+
+// Define types for the data structures
+type Product = {
+  id: string;
+  name: string;
+  imageUrl?: string;
+};
+
+type OrderItem = {
+  id: string;
+  product: Product;
+  quantity: number;
+  subTotal: number;
+};
+
+type Order = {
+  id: string;
+  orderNumber: string;
+  createdAt: string;
+  totalAmount: number;
+  shippingFee: number;
+  shippingOption: string;
+  orderStatus: "Completed" | "Pending" | "Cancelled" | string;
+  deliveryStatus: "Delivered" | "Waiting For Rider" | "On the Way" | string;
+  paymentStatus: "Paid" | "Pending" | "Failed" | string;
+  name: string;
+  address: string;
+  riderName?: string;
+  message?: string;
+  orderItems: OrderItem[];
+};
+
+type OrderHistoryPageProps = {
+  orders?: Order[];
+};
+
+type OrderItemProps = {
+  item: OrderItem;
+};
+
+type StatusBadgeProps = {
+  status: string;
+  type: "order" | "delivery" | "payment";
+};
+
+// Status badges with appropriate colors
+const StatusBadge = ({ status, type }: StatusBadgeProps) => {
+  let bgColor: string = "bg-gray-100";
+  let textColor: string = "text-gray-800";
+
+  if (type === "order") {
+    if (status === "Completed") {
+      bgColor = "bg-green-100";
+      textColor = "text-green-800";
+    } else if (status === "Pending") {
+      bgColor = "bg-yellow-100";
+      textColor = "text-yellow-800";
+    } else if (status === "Cancelled") {
+      bgColor = "bg-red-100";
+      textColor = "text-red-800";
+    } else {
+      bgColor = "bg-blue-100";
+      textColor = "text-blue-800";
+    }
+  } else if (type === "delivery") {
+    if (status === "Delivered") {
+      bgColor = "bg-green-100";
+      textColor = "text-green-800";
+    } else if (status === "Waiting For Rider") {
+      bgColor = "bg-yellow-100";
+      textColor = "text-yellow-800";
+    } else if (status === "On the Way") {
+      bgColor = "bg-blue-100";
+      textColor = "text-blue-800";
+    } else {
+      bgColor = "bg-gray-100";
+      textColor = "text-gray-800";
+    }
+  } else if (type === "payment") {
+    if (status === "Paid") {
+      bgColor = "bg-green-100";
+      textColor = "text-green-800";
+    } else if (status === "Pending") {
+      bgColor = "bg-yellow-100";
+      textColor = "text-yellow-800";
+    } else if (status === "Failed") {
+      bgColor = "bg-red-100";
+      textColor = "text-red-800";
+    } else {
+      bgColor = "bg-gray-100";
+      textColor = "text-gray-800";
+    }
+  }
+
+  return (
+    <span
+      className={`${bgColor} ${textColor} text-xs font-medium px-2.5 py-0.5 rounded-full`}
+    >
+      {status}
+    </span>
+  );
+};
+
+const OrderItem = ({ item }: OrderItemProps) => {
+  return (
+    <div className="flex items-center space-x-3 py-2">
+      <div className="relative h-12 w-12 rounded-md overflow-hidden bg-gray-100">
+        {item.product.imageUrl ? (
+          <Image
+            src={item.product.imageUrl}
+            alt={item.product.name}
+            fill
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full w-full text-[#452E19]/50">
+            No image
+          </div>
+        )}
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-medium text-[#452E19]">
+          {item.product.name}
+        </p>
+        <p className="text-xs text-[#452E19]/70">Qty: {item.quantity}</p>
+      </div>
+      <p className="text-sm font-semibold text-[#452E19]">
+        ₱{item.subTotal.toFixed(2)}
+      </p>
+    </div>
+  );
+};
+
+const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
+  const router = useRouter();
+  const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
+  const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(
+    null
+  );
+  const [cancelModal, setCancelModal] = useState<boolean>(false);
+  const [cancellationReason, setCancellationReason] = useState<string>("");
+  const [otherReason, setOtherReason] = useState<string>("");
+
+  // Toggle order details
+  const toggleOrderDetails = (orderId: string) => {
+    if (activeOrderId === orderId) {
+      setActiveOrderId(null);
+    } else {
+      setActiveOrderId(orderId);
+    }
+  };
+
+  // Check if order is within 24 hours
+  const isWithin24Hours = (createdAt: string) => {
+    const orderDate = new Date(createdAt);
+    const now = new Date();
+    return differenceInHours(now, orderDate) < 24;
+  };
+
+  // Handle cancel order click
+  const handleCancelClick = (orderId: string) => {
+    setCancellingOrderId(orderId);
+    setCancellationReason("");
+    setOtherReason("");
+  };
+
+  // Handle cancellation submission
+  const submitCancellation = async () => {
+    if (!cancellingOrderId) return;
+
+    const finalReason =
+      cancellationReason === "other"
+        ? `Other: ${otherReason}`
+        : cancellationReason;
+
+    try {
+      const response = await cancelOrder(cancellingOrderId, finalReason)
+
+      if (response.error) {
+        toast.error(response.error);
+      }
+
+      router.refresh();
+      toast.success("Order cancelled successfully.");
+    } catch (error) {
+      console.error("Cancellation failed:", error);
+      toast.error("Failed to cancel order. Please try again later.");
+    } finally {
+      setCancellingOrderId(null);
+      setCancellationReason("");
+      setOtherReason("");
+      setCancelModal(false);
+    }
+  };
+
+  // Filter options
+  const [filter, setFilter] = useState<
+    "all" | "completed" | "pending" | "cancelled" | "refunded"
+  >("all");
+
+  // Filtered orders based on selected filter
+  const filteredOrders = orders.filter((order) => {
+    if (filter === "all") return true;
+    if (filter === "completed") return order.orderStatus === "Completed";
+    if (filter === "pending") return order.orderStatus === "Pending";
+    if (filter === "cancelled") return order.orderStatus === "Cancelled";
+    if (filter === "refunded") return order.orderStatus === "Refunded";
+    return true;
+  });
+
+  return (
+    <div className="min-h-screen pt-32 pb-16">
+      <Modal isOpen={cancelModal} onClose={() => setCancelModal(false)}>
+        <div>
+          <h3 className="text-lg font-bold text-[#452E19] mb-4">
+            Cancel Order
+          </h3>
+          <p className="text-[#452E19]/80 mb-4">
+            Please tell us why you&apos;re canceling this order:
+          </p>
+          <div className="space-y-3 mb-4">
+            {[
+              "I don't like it",
+              "Short of money",
+              "Found a better deal",
+              "Changed my mind",
+              "other",
+            ].map((reason) => (
+              <div key={reason} className="flex items-center">
+                <input
+                  type="radio"
+                  id={`reason-${reason}`}
+                  name="cancellationReason"
+                  value={reason}
+                  checked={cancellationReason === reason}
+                  onChange={() => setCancellationReason(reason)}
+                  className="h-4 w-4 text-[#8BC34A] focus:ring-[#8BC34A]"
+                />
+                <label
+                  htmlFor={`reason-${reason}`}
+                  className="ml-2 text-sm text-[#452E19]"
+                >
+                  {reason === "other" ? "Other (please specify)" : reason}
+                </label>
+              </div>
+            ))}
+
+            {cancellationReason === "other" && (
+              <textarea
+                value={otherReason}
+                onChange={(e) => setOtherReason(e.target.value)}
+                placeholder="Please specify your reason..."
+                className="w-full mt-2 p-2 border border-gray-300 rounded-md text-sm text-[#452E19]"
+                rows={3}
+              />
+            )}
+          </div>
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={() => {
+                setCancellingOrderId(null);
+                setCancelModal(false);
+              }}
+              className="px-4 py-2 text-sm font-medium text-[#452E19] bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+            >
+              Back
+            </button>
+            <button
+              onClick={submitCancellation}
+              disabled={
+                !cancellationReason ||
+                (cancellationReason === "other" && !otherReason)
+              }
+              className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
+                !cancellationReason ||
+                (cancellationReason === "other" && !otherReason)
+                  ? "bg-red-300 cursor-not-allowed"
+                  : "bg-red-500 hover:bg-red-600"
+              }`}
+            >
+              Confirm Cancellation
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-[#452E19]">My Orders</h1>
+          <p className="text-[#452E19]/70 mt-2">
+            View and track all your Marian Homebakes orders
+          </p>
+        </div>
+
+        {/* Filter section */}
+        <div className="bg-white rounded-lg shadow-sm mb-6 p-4 flex flex-wrap gap-2">
+          <button
+            onClick={() => setFilter("all")}
+            className={`px-4 py-2 text-sm rounded-full transition-colors ${
+              filter === "all"
+                ? "bg-[#8BC34A] text-white"
+                : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
+            }`}
+          >
+            All Orders
+          </button>
+          <button
+            onClick={() => setFilter("pending")}
+            className={`px-4 py-2 text-sm rounded-full transition-colors ${
+              filter === "pending"
+                ? "bg-[#8BC34A] text-white"
+                : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
+            }`}
+          >
+            Pending
+          </button>
+          <button
+            onClick={() => setFilter("completed")}
+            className={`px-4 py-2 text-sm rounded-full transition-colors ${
+              filter === "completed"
+                ? "bg-[#8BC34A] text-white"
+                : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
+            }`}
+          >
+            Completed
+          </button>
+          <button
+            onClick={() => setFilter("cancelled")}
+            className={`px-4 py-2 text-sm rounded-full transition-colors ${
+              filter === "cancelled"
+                ? "bg-[#8BC34A] text-white"
+                : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
+            }`}
+          >
+            Cancelled
+          </button>
+          <button
+            onClick={() => setFilter("refunded")}
+            className={`px-4 py-2 text-sm rounded-full transition-colors ${
+              filter === "refunded"
+                ? "bg-[#8BC34A] text-white"
+                : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
+            }`}
+          >
+            Refunded
+          </button>
+        </div>
+
+        {/* Orders list */}
+        {filteredOrders.length > 0 ? (
+          <div className="space-y-6">
+            {filteredOrders.map((order) => {
+              const canCancel =
+                (order.orderStatus === "Pending" ||
+                  order.deliveryStatus === "Waiting For Rider") &&
+                isWithin24Hours(order.createdAt);
+              return (
+                <div
+                  key={order.id}
+                  className="bg-white rounded-xl shadow-md overflow-hidden border border-[#D0F2B7]/50"
+                >
+                  {/* Order header */}
+                  <div className="bg-[#D0F2B7]/30 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between">
+                    <div>
+                      <p className="text-sm text-[#452E19]/70">
+                        Order #{order.orderNumber}
+                      </p>
+                      <p className="text-sm text-[#452E19]/70">
+                        Placed on{" "}
+                        {format(new Date(order.createdAt), "MMM d, yyyy")}
+                      </p>
+                    </div>
+                    <div className="flex flex-col sm:items-end mt-2 sm:mt-0">
+                      <p className="text-lg font-bold text-[#452E19]">
+                        ₱{order.totalAmount.toFixed(2)}
+                      </p>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <StatusBadge status={order.orderStatus} type="order" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order summary */}
+                  <div className="px-6 py-4">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="hidden sm:flex items-center space-x-2 mr-6">
+                          {order.orderItems.slice(0, 3).map((item, index) => (
+                            <div
+                              key={item.id}
+                              className={`relative h-12 w-12 rounded-md overflow-hidden bg-gray-100 border-2 border-white ${
+                                index > 0 ? "-ml-4" : ""
+                              }`}
+                              style={{ zIndex: 10 - index }}
+                            >
+                              {item.product?.imageUrl ? (
+                                <Image
+                                  src={item.product.imageUrl}
+                                  alt={item.product.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <div className="flex items-center justify-center h-full w-full text-[#452E19]/50">
+                                  <span className="text-xs">No img</span>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                          {order.orderItems.length > 3 && (
+                            <span className="text-sm text-[#452E19]/70">
+                              +{order.orderItems.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                        <div className="sm:hidden">
+                          <p className="text-sm text-[#452E19]">
+                            {order.orderItems.length}{" "}
+                            {order.orderItems.length === 1 ? "item" : "items"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-4">
+                        <button
+                          onClick={() => toggleOrderDetails(order.id)}
+                          className="text-sm font-medium text-[#8BC34A] hover:text-[#7CB342] transition-colors"
+                        >
+                          {activeOrderId === order.id
+                            ? "Hide Details"
+                            : "View Details"}
+                        </button>
+                        {order.orderStatus === "Completed" && (
+                          <button className="text-sm font-medium text-[#452E19]/70 hover:text-[#452E19] transition-colors">
+                            Buy Again
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Order details (expandable) */}
+                  {activeOrderId === order.id && (
+                    <div className="bg-[#F8FAF5] border-t border-[#D0F2B7]/30 px-6 py-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Left column: Order items */}
+                        <div>
+                          <h3 className="font-semibold text-[#452E19] mb-3">
+                            Order Items
+                          </h3>
+                          <div className="bg-white rounded-lg shadow-sm p-4 divide-y divide-gray-100">
+                            {order.orderItems.map((item) => (
+                              <OrderItem key={item.id} item={item} />
+                            ))}
+
+                            {/* Order summary */}
+                            <div className="pt-4 space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span className="text-[#452E19]/70">
+                                  Subtotal
+                                </span>
+                                <span className="text-[#452E19]">
+                                  ₱
+                                  {(
+                                    order.totalAmount - order.shippingFee
+                                  ).toFixed(2)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-[#452E19]/70">
+                                  Shipping ({order.shippingOption})
+                                </span>
+                                <span className="text-[#452E19]">
+                                  ₱{order.shippingFee.toFixed(2)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between text-base font-semibold pt-2 border-t">
+                                <span className="text-[#452E19]">Total</span>
+                                <span className="text-[#452E19]">
+                                  ₱{order.totalAmount.toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right column: Delivery info */}
+                        <div>
+                          <h3 className="font-semibold text-[#452E19] mb-3">
+                            Delivery Information
+                          </h3>
+                          <div className="bg-white rounded-lg shadow-sm p-4 space-y-4">
+                            {/* Status information */}
+                            <div className="space-y-3">
+                              <div className="flex justify-between">
+                                <span className="text-sm text-[#452E19]/70">
+                                  Order Status
+                                </span>
+                                <StatusBadge
+                                  status={order.orderStatus}
+                                  type="order"
+                                />
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm text-[#452E19]/70">
+                                  Delivery Status
+                                </span>
+                                <StatusBadge
+                                  status={order.deliveryStatus}
+                                  type="delivery"
+                                />
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm text-[#452E19]/70">
+                                  Payment Status
+                                </span>
+                                <StatusBadge
+                                  status={order.paymentStatus}
+                                  type="payment"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Separator */}
+                            <hr className="border-gray-100" />
+
+                            {/* Shipping details */}
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-[#452E19]">
+                                Shipping Address
+                              </h4>
+                              <p className="text-sm text-[#452E19]/70">
+                                {order.name}
+                                <br />
+                                {order.address}
+                              </p>
+                            </div>
+
+                            {/* Rider info if available */}
+                            {order.riderName && (
+                              <>
+                                <hr className="border-gray-100" />
+                                <div className="space-y-2">
+                                  <h4 className="text-sm font-medium text-[#452E19]">
+                                    Delivery Rider
+                                  </h4>
+                                  <p className="text-sm text-[#452E19]/70">
+                                    {order.riderName}
+                                  </p>
+                                </div>
+                              </>
+                            )}
+
+                            {/* Customer message if available */}
+                            {order.message && (
+                              <>
+                                <hr className="border-gray-100" />
+                                <div className="space-y-2">
+                                  <h4 className="text-sm font-medium text-[#452E19]">
+                                    Message
+                                  </h4>
+                                  <p className="text-sm text-[#452E19]/70 italic">
+                                    {order.message}
+                                  </p>
+                                </div>
+                              </>
+                            )}
+                          </div>
+
+                          {/* Action buttons */}
+                          {(order.orderStatus === "Pending" || order.paymentStatus === "Pending") && (
+                            order.deliveryStatus === "Waiting For Rider") && (
+                            <div className="mt-4 flex justify-end">
+                              <button
+                                disabled={!canCancel}
+                                onClick={() => {
+                                  handleCancelClick(order.id);
+                                  setCancelModal(true);
+                                }}
+                                className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
+                                  canCancel
+                                    ? "bg-red-500 hover:bg-red-600"
+                                    : "bg-gray-400 cursor-not-allowed"
+                                }`}
+                              >
+                                {canCancel
+                                  ? "Cancel Order"
+                                  : "Cancellation Period Expired"}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-md p-8 text-center">
+            <div className="mb-4 text-[#452E19]/40">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-16 w-16 mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M20 7l-8-4-8 4m16 0v10l-8 4m0-10v10m0-10l-8-4m8 8l8-4"
+                />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-[#452E19] mb-2">
+              No orders found
+            </h3>
+            <p className="text-[#452E19]/70 mb-6">
+              {filter === "all"
+                ? "You haven't placed any orders yet."
+                : `You don't have any ${filter} orders.`}
+            </p>
+            <Link
+              href="/products"
+              className="inline-block px-6 py-3 bg-[#8BC34A] text-white rounded-full font-medium hover:bg-[#7CB342] transition-colors shadow-sm"
+            >
+              Browse Products
+            </Link>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default OrderHistoryPage;

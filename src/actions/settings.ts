@@ -215,17 +215,46 @@ export const updateFaqsInfo = async (
 
 export const updatePoliciesInfo = async (
   policies: {
+    id?: string;
     title: string;
     content: string;
   }[]
 ) => {
   try {
-    await db.policies.createMany({
-      data: policies.map((policy) => ({
-        title: policy.title,
-        content: policy.content,
-      })),
-    });
+    // First delete any policies that were removed from the form
+    const existingPolicies = await db.policies.findMany();
+    const existingIds = existingPolicies.map((p) => p.id);
+    const currentIds = policies.map((p) => p.id).filter(Boolean) as string[];
+
+    const idsToDelete = existingIds.filter((id) => !currentIds.includes(id));
+
+    if (idsToDelete.length > 0) {
+      await db.policies.deleteMany({
+        where: { id: { in: idsToDelete } },
+      });
+    }
+
+    // Then update or create policies
+    await Promise.all(
+      policies.map((policy) => {
+        if (policy.id) {
+          return db.policies.update({
+            where: { id: policy.id },
+            data: {
+              title: policy.title,
+              content: policy.content,
+            },
+          });
+        } else {
+          return db.policies.create({
+            data: {
+              title: policy.title,
+              content: policy.content,
+            },
+          });
+        }
+      })
+    );
 
     await db.logs.create({
       data: {

@@ -42,7 +42,6 @@ const flavorColors = {
 
 const Customization = () => {
   const [loading, setLoading] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState("");
   const [isGenerated, setIsGenerated] = useState(false);
   const router = useRouter();
   const {
@@ -53,12 +52,14 @@ const Customization = () => {
     type,
     additionalNotes,
     color,
+    generatedImage,
     setSize,
     setShape,
     setLayers,
     setType,
     setColor,
     setAdditionalNotes,
+    setGeneratedImage
   } = useCustomizationStore();
 
   const generateCake = async () => {
@@ -88,13 +89,14 @@ const Customization = () => {
 
     try {
       const res = await axios.request(options);
+      // Use the setter from the store
       setGeneratedImage(res?.data.url);
       toast.success("Cake design generated.");
 
       // Store data in localStorage
       const finalData = {
         ...customizationData,
-        generatedImage: generatedImage,
+        generatedImage: res?.data.url, // Use the fresh image URL
       };
       localStorage.setItem("customizationData", JSON.stringify(finalData));
       setIsGenerated(true);

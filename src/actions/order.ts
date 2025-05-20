@@ -172,3 +172,46 @@ export const getOrderById = async (orderId: string) => {
     return { error: "Failed to fetch order" };
   }
 };
+
+export const getAllOrders = async () => {
+  try {
+    const orders = await db.orders.findMany({
+      include: {
+        orderItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return { success: "Orders fetched successfully", data: orders };
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return { error: "Failed to fetch orders" };
+  }
+};
+
+export const cancelOrder = async (orderId: string, reason: string) => {
+  try {
+    await db.orders.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        orderStatus: "Cancelled",
+        deliveryStatus: "Cancelled",
+        paymentStatus: "Cancelled",
+        cancellationReason: reason,
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { error: "Failed to cancel order" };
+  }
+};

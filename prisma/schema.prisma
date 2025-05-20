@@ -9,16 +9,17 @@ datasource db {
 }
 
 model Users {
-  id          String  @id @default(cuid())
-  clerkId     String
-  name        String
-  email       String  @unique
-  password    String?
-  address     String?
-  phoneNumber String?
-  imageUrl    String?
-  gender      String?
-  dateOfBirth String?
+  id              String  @id @default(cuid())
+  clerkId         String
+  name            String
+  email           String  @unique
+  password        String?
+  address         String?
+  phoneNumber     String?
+  imageUrl        String?
+  gender          String?
+  dateOfBirth     String?
+  customizedCount Int?    @default(3)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -74,7 +75,9 @@ model Orders {
   shippingOption String
   shippingFee    Float
 
-  riderName String?
+  riderName          String?
+  cancellationReason String?
+  cancelledAt        DateTime?
 
   userId String
   user   Users  @relation(fields: [userId], references: [id])
@@ -232,4 +235,25 @@ model Refund {
   updatedAt DateTime @updatedAt
 
   @@index([orderId])
+}
+
+model CustomizedCake {
+  id              String    @id @default(cuid())
+  theme           String
+  size            String
+  shape           String
+  layers          String
+  flavor          String
+  icingType       String
+  additionalNotes String?
+  imageUrl        String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  price           Float
+  status          String    @default("Pending") // Pending, Approved, Rejected
+  customerName    String?
+  customerEmail   String?
+  customerPhone   String?
+  deliveryDate    DateTime?
+  deliveryAddress String?
 }

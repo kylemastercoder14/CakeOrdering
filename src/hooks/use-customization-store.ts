@@ -10,6 +10,7 @@ interface CustomizationState {
   color: string;
   type: string;
   additionalNotes: string;
+  generatedImage: string | null;
   setKey: () => void;
   setTheme: (theme: string) => void;
   setSize: (size: string) => void;
@@ -18,6 +19,7 @@ interface CustomizationState {
   setType: (type: string) => void;
   setColor: (color: string) => void;
   setAdditionalNotes: (notes: string) => void;
+  setGeneratedImage: (imageUrl: string | null) => void;
 }
 
 export const useCustomizationStore = create<CustomizationState>((set) => ({
@@ -29,6 +31,7 @@ export const useCustomizationStore = create<CustomizationState>((set) => ({
   color: "#fff",
   type: "Icing",
   additionalNotes: "",
+  generatedImage: null,
   setKey: () => set({ key: nanoid() }),
   setTheme: (theme) => set({ selectedTheme: theme }),
   setSize: (size) => set({ size }),
@@ -37,4 +40,5 @@ export const useCustomizationStore = create<CustomizationState>((set) => ({
   setColor: (color) => set({ color }),
   setType: (type) => set({ type }),
   setAdditionalNotes: (notes) => set({ additionalNotes: notes }),
+  setGeneratedImage: (imageUrl) => set({ generatedImage: imageUrl }),
 }));

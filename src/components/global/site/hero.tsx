@@ -1,8 +1,11 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 const Hero = () => {
+  const router = useRouter();
   return (
     <div className="relative w-full h-screen overflow-hidden">
       <Image
@@ -17,8 +20,8 @@ const Hero = () => {
           Turning your sweetest dreams into beautifully customized cakes for
           every occasion.
         </h1>
-        <Button className="mt-5" size="lg">
-          Learn More &rarr;
+        <Button onClick={() => router.push("/products")} className="mt-5" size="lg">
+          Browse Products &rarr;
         </Button>
       </div>
     </div>

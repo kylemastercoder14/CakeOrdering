@@ -2,8 +2,8 @@ import React from "react";
 import db from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from '../../ui/button';
-import { ShoppingCartIcon } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { ShoppingCartIcon } from "lucide-react";
 
 const PromotionBanner = async () => {
   const data = await db.promotions.findFirst();
@@ -21,23 +21,25 @@ const PromotionBanner = async () => {
             className="w-full h-full rounded-md object-cover"
           />
           <div className="absolute inset-0">
-            <div className="flex items-center justify-center gap-10 px-20 h-full">
-              <div className="w-[20%]">
-				<ShoppingCartIcon className='text-[#D0F2B7] mb-10 size-40' />
-				<Button size="lg" variant="outline">Book your order now</Button>
-			  </div>
-              <div className="w-[30%] border-[4px] flex flex-col items-center justify-center p-5 border-[#D0F2B7]">
-                <p className="text-[#D0F2B7] text-2xl">UP TO</p>
-                <p className="text-white text-8xl font-semibold border-b-[5px] border-white">
+            <div className="flex lg:flex-row flex-col items-center justify-center lg:gap-10 gap-5 lg:px-20 px-10 h-full">
+              <div className="lg:w-[20%]">
+                <ShoppingCartIcon className="text-[#D0F2B7] text-center lg:mx-0 mx-auto lg:mb-10 mb-5 lg:size-40 size-10" />
+                <Button size="lg" variant="outline">
+                  <Link href="/products">Book your order now</Link>
+                </Button>
+              </div>
+              <div className="lg:w-[30%] lg:border-[4px] border-2 flex flex-col items-center justify-center lg:p-5 p-2 border-[#D0F2B7]">
+                <p className="text-[#D0F2B7] lg:text-2xl text-sm">UP TO</p>
+                <p className="text-white lg:text-8xl text-base font-semibold lg:border-b-[5px] border-b-2 border-white">
                   {data?.discount}%
                 </p>
-                <p className="text-white text-8xl font-semibold border-b-[5px] border-white">
+                <p className="text-white lg:text-8xl text-base font-semibold lg:border-b-[5px] border-b-2 border-white">
                   OFF
                 </p>
-                <p className="text-[#D0F2B7] text-2xl">any occasional</p>
+                <p className="text-[#D0F2B7] lg:text-2xl text-sm">any occasional</p>
               </div>
-              <div className="w-[50%]">
-                <p className="uppercase font-semibold text-center text-4xl text-[#D0F2B7]">
+              <div className="lg:w-[50%]">
+                <p className="uppercase font-semibold text-center lg:text-4xl text-base text-[#D0F2B7]">
                   {data?.description}
                 </p>
               </div>

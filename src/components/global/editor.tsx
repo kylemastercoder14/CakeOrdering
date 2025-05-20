@@ -31,7 +31,7 @@ const Editor = ({
         theme="snow"
         value={value}
         onChange={onChange}
-        className="dark:text-white" // Ensure text is white in dark mode
+        className="dark:text-white"
       />
     </div>
   );
