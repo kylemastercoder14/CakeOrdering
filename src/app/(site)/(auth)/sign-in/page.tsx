@@ -30,11 +30,11 @@ const Page = () => {
 // 	}
 //   };
   return (
-	<div className="flex flex-col items-center w-full bg-[#D0F2B7] h-screen justify-center">
+	<div className="flex p-5 flex-col items-center w-full bg-[#D0F2B7] h-screen justify-center">
 	  <Button
 		// onClick={() => signInWith("oauth_google")}
 		size="lg"
-		className="px-40"
+		className="lg:px-40"
 	  >
 		<Image
 		  src="/assets/google.svg"

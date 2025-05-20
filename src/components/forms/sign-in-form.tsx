@@ -103,7 +103,7 @@ const SigninForm = () => {
           )}
         />
         <Button
-          className="mx-auto flex items-center justify-center px-40"
+          className="mx-auto flex items-center justify-center lg:px-40"
           disabled={isSubmitting}
           type="submit"
         >
