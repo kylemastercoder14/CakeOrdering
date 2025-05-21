@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const LoginValidation = z.object({
+  email: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .min(1, { message: "Email is required" }),
+  password: z.string().min(1, { message: "Password is required" }),
+});
+
 export const RegistrationValidation = z
   .object({
     firstName: z.string().min(1, { message: "First name is required" }),
