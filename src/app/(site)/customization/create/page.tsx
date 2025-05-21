@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Textarea } from "../../../../components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 
 const sizes = [
   { name: "Quarter Sheet", value: "9x13" },
@@ -78,7 +78,7 @@ const Customization = () => {
       method: "POST",
       url: "https://ai-text-to-image-generator-api.p.rapidapi.com/realistic",
       headers: {
-        "x-rapidapi-key": "557b91e9fcmshdc8451bcbfd8106p18f760jsn1fb6a1656ead",
+        "x-rapidapi-key": "ab760ca41dmshf0fa6b061746929p1fa376jsnfb7e6e5f37ae",
         "x-rapidapi-host": "ai-text-to-image-generator-api.p.rapidapi.com",
         "Content-Type": "application/json",
       },
