@@ -33,3 +33,34 @@ export const createAccount = async (
     return { error: "An error occurred while creating the account." };
   }
 };
+
+export const createOAuthUser = async (userData: {
+  clerkId: string;
+  name: string;
+  email: string;
+  imageUrl?: string;
+}) => {
+  try {
+    const existingUser = await db.users.findUnique({
+      where: { email: userData.email },
+    });
+
+    if (existingUser) {
+      return { success: "User already exists" };
+    }
+
+    const newUser = await db.users.create({
+      data: {
+        clerkId: userData.clerkId,
+        name: userData.name,
+        email: userData.email,
+        imageUrl: userData.imageUrl,
+      },
+    });
+
+    return { success: "User created successfully", user: newUser };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return { error: "Failed to create user" };
+  }
+};

@@ -125,7 +125,7 @@ const Customization = () => {
             <img
               src={generatedImage}
               alt="Generated Cake Preview"
-              className="w-full h-full object-cover rounded-lg shadow-2xl"
+              className="w-full h-full object-contain rounded-lg shadow-2xl"
             />
           ) : (
             <div className="text-center flex items-center justify-center h-full text-black">

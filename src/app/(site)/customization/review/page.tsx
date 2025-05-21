@@ -153,7 +153,7 @@ const Page = () => {
                   <img
                     src={generatedImage}
                     alt="Custom Cake Design"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               ) : (

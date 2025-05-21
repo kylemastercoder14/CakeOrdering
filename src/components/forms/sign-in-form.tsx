@@ -89,7 +89,15 @@ const SigninForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <div className="flex items-center justify-between">
+                <FormLabel>Password</FormLabel>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-black hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <FormControl>
                 <Input
                   type="password"
@@ -103,7 +111,7 @@ const SigninForm = () => {
           )}
         />
         <Button
-          className="mx-auto flex items-center justify-center lg:px-40"
+          className="w-full"
           disabled={isSubmitting}
           type="submit"
         >

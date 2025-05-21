@@ -41,6 +41,16 @@ const SignupForm = () => {
 
   const { isSubmitting } = form.formState;
 
+  const password = form.watch("password");
+
+  const passwordRequirements = [
+    { label: "At least 8 characters", valid: password.length >= 8 },
+    { label: "One uppercase letter", valid: /[A-Z]/.test(password) },
+    { label: "One lowercase letter", valid: /[a-z]/.test(password) },
+    { label: "One number", valid: /[0-9]/.test(password) },
+    { label: "One special character", valid: /[^A-Za-z0-9]/.test(password) },
+  ];
+
   const onSubmit = async (values: z.infer<typeof RegistrationValidation>) => {
     if (!isLoaded) return;
     if (values.password !== values.confirmPassword) {
@@ -204,11 +214,19 @@ const SignupForm = () => {
             )}
           />
         </div>
-        <Button
-          className="mx-auto flex items-center justify-center lg:px-40"
-          disabled={isSubmitting}
-          type="submit"
-        >
+        <div className="mt-2 space-y-1">
+          {passwordRequirements.map((req, idx) => (
+            <p
+              key={idx}
+              className={`text-sm ${
+                req.valid ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              • {req.label}
+            </p>
+          ))}
+        </div>
+        <Button className="w-full" disabled={isSubmitting} type="submit">
           Sign Up
         </Button>
         <div className="flex gap-1 justify-center items-center">
