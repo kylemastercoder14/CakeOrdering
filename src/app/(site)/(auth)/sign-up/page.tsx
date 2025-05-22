@@ -1,12 +1,21 @@
 import React from "react";
 import SignupForm from "@/components/forms/sign-up-form";
+import db from "@/lib/db";
 
-const Page = () => {
+const Page = async () => {
+  const privacyPolicy = await db.policies.findFirst({
+    where: { title: "Privacy Policy" },
+  });
+
+  const termsOfService = await db.policies.findFirst({
+    where: { title: "Terms & Conditions" },
+  });
+
   return (
     <div className="flex flex-col p-5 items-center w-full bg-[#D0F2B7] h-screen justify-center">
       <div className="bg-white shadow lg:w-1/2 w-full p-5 rounded-md">
         <h2 className="text-xl font-semibold">New Registration</h2>
-        <SignupForm />
+        <SignupForm termsOfService={termsOfService} privacyPolicy={privacyPolicy} />
       </div>
     </div>
   );

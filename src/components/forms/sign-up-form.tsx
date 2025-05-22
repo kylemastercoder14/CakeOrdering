@@ -1,12 +1,9 @@
 "use client";
 
 import React from "react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { RegistrationValidation } from "@/validators/user";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -22,10 +19,45 @@ import { useSignUp } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { createAccount } from "@/actions/user";
+import { Policies } from "@prisma/client";
+import { Modal } from "@/components/ui/modal";
+import { Checkbox } from "@/components/ui/checkbox";
 
-const SignupForm = () => {
+// Define the base schema
+const RegistrationBaseSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+  address: z.string().min(1, "Address is required"),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string(),
+  acceptTerms: z.boolean().refine((val) => val, {
+    message: "You must accept the terms and conditions",
+  }),
+});
+
+// Add password matching refinement
+const RegistrationValidation = RegistrationBaseSchema.refine(
+  (data) => data.password === data.confirmPassword,
+  {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  }
+);
+
+const SignupForm = ({
+  privacyPolicy,
+  termsOfService,
+}: {
+  privacyPolicy: Policies | null;
+  termsOfService: Policies | null;
+}) => {
   const { signUp, isLoaded } = useSignUp();
+  const [privacyModal, setPrivacyModal] = React.useState(false);
+  const [termsModal, setTermsModal] = React.useState(false);
   const router = useRouter();
+
   const form = useForm<z.infer<typeof RegistrationValidation>>({
     resolver: zodResolver(RegistrationValidation),
     defaultValues: {
@@ -36,11 +68,11 @@ const SignupForm = () => {
       phoneNumber: "",
       password: "",
       confirmPassword: "",
+      acceptTerms: true,
     },
   });
 
   const { isSubmitting } = form.formState;
-
   const password = form.watch("password");
 
   const passwordRequirements = [
@@ -53,10 +85,6 @@ const SignupForm = () => {
 
   const onSubmit = async (values: z.infer<typeof RegistrationValidation>) => {
     if (!isLoaded) return;
-    if (values.password !== values.confirmPassword) {
-      toast.error("Passwords do not match.");
-      return;
-    }
     try {
       await signUp.create({
         emailAddress: values.email,
@@ -83,74 +111,90 @@ const SignupForm = () => {
   if (!isLoaded) {
     return null;
   }
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-5">
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isSubmitting}
-                    placeholder="Enter your first name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isSubmitting}
-                    placeholder="Enter your last name"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email Address</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  disabled={isSubmitting}
-                  placeholder="Enter your email address"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+    <>
+      {/* Privacy Policy Modal */}
+      <Modal
+        isOpen={privacyModal}
+        onClose={() => setPrivacyModal(false)}
+        title="Privacy Policy"
+        className="max-w-lg"
+      >
+        <div className="prose max-h-[70vh] overflow-y-auto p-4">
+          {privacyPolicy?.content ? (
+            <div dangerouslySetInnerHTML={{ __html: privacyPolicy.content }} />
+          ) : (
+            <p>No privacy policy available.</p>
           )}
-        />
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
+        </div>
+      </Modal>
+
+      {/* Terms of Service Modal */}
+      <Modal
+        isOpen={termsModal}
+        onClose={() => setTermsModal(false)}
+        title="Terms & Conditions"
+        className="max-w-lg"
+      >
+        <div className="prose max-h-[70vh] overflow-y-auto p-4">
+          {termsOfService?.content ? (
+            <div dangerouslySetInnerHTML={{ __html: termsOfService.content }} />
+          ) : (
+            <p>No terms of service available.</p>
+          )}
+        </div>
+      </Modal>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-5">
+          <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Enter your first name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Enter your last name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
-            name="address"
+            name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Complete Address</FormLabel>
+                <FormLabel>Email Address</FormLabel>
                 <FormControl>
                   <Input
+                    type="email"
                     disabled={isSubmitting}
-                    placeholder="Enter your complete address"
+                    placeholder="Enter your email address"
                     {...field}
                   />
                 </FormControl>
@@ -158,89 +202,148 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
+          <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Complete Address</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Enter your complete address"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Active Phone Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="Enter your active phone number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      disabled={isSubmitting}
+                      placeholder="Enter your password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      disabled={isSubmitting}
+                      placeholder="Confirm your password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="mt-2 space-y-1">
+            {passwordRequirements.map((req, idx) => (
+              <p
+                key={idx}
+                className={`text-sm ${
+                  req.valid ? "text-green-600" : "text-red-500"
+                }`}
+              >
+                • {req.label}
+              </p>
+            ))}
+          </div>
+
+          {/* Terms Acceptance Checkbox */}
           <FormField
             control={form.control}
-            name="phoneNumber"
+            name="acceptTerms"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Active Phone Number</FormLabel>
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                 <FormControl>
-                  <Input
-                    disabled={isSubmitting}
-                    placeholder="Enter your active phone number"
-                    {...field}
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <FormMessage />
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    I agree to the{" "}
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="p-0 h-auto"
+                      onClick={() => setTermsModal(true)}
+                    >
+                      Terms & Conditions
+                    </Button>{" "}
+                    and{" "}
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="p-0 h-auto"
+                      onClick={() => setPrivacyModal(true)}
+                    >
+                      Privacy Policy
+                    </Button>
+                  </FormLabel>
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
-        </div>
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    disabled={isSubmitting}
-                    placeholder="Enter your password"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    disabled={isSubmitting}
-                    placeholder="Confirm your password"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="mt-2 space-y-1">
-          {passwordRequirements.map((req, idx) => (
-            <p
-              key={idx}
-              className={`text-sm ${
-                req.valid ? "text-green-600" : "text-red-500"
-              }`}
-            >
-              • {req.label}
-            </p>
-          ))}
-        </div>
-        <Button className="w-full" disabled={isSubmitting} type="submit">
-          Sign Up
-        </Button>
-        <div className="flex gap-1 justify-center items-center">
-          <p>Already have an account?</p>
-          <Link href="/sign-in" className="underline">
-            Sign in
-          </Link>
-        </div>
-      </form>
-      <div
-        className="flex items-center justify-center mx-auto text-center mt-3"
-        id="clerk-captcha"
-      ></div>
-    </Form>
+
+          <Button className="w-full" disabled={isSubmitting} type="submit">
+            Sign Up
+          </Button>
+          <div className="flex gap-1 justify-center items-center">
+            <p>Already have an account?</p>
+            <Link href="/sign-in" className="underline">
+              Sign in
+            </Link>
+          </div>
+        </form>
+        <div
+          className="flex items-center justify-center mx-auto text-center mt-3"
+          id="clerk-captcha"
+        ></div>
+      </Form>
+    </>
   );
 };
 
