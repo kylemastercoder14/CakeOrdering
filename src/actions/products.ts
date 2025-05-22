@@ -1,6 +1,7 @@
 "use server";
 
 import db from "@/lib/db";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const createProduct = async (values: {
   name: string;
@@ -12,7 +13,7 @@ export const createProduct = async (values: {
   isFeatured?: boolean;
 }) => {
   try {
-    await db.products.create({
+    const product = await db.products.create({
       data: {
         name: values.name,
         description: values.description,
@@ -31,6 +32,15 @@ export const createProduct = async (values: {
         } at ${new Date().toLocaleString()}`,
       },
     });
+
+    // Revalidate relevant paths
+    revalidatePath("/"); // Home page
+    revalidatePath("/products"); // Products listing page
+    revalidatePath(`/products/${product.id}`); // Product detail page if exists
+
+    // Revalidate by tag (if using tagged fetching)
+    revalidateTag("products");
+    revalidateTag("featured-products");
 
     return { success: "Product created successfully." };
   } catch (error) {
@@ -73,6 +83,15 @@ export const updateProduct = async (
       },
     });
 
+    // Revalidate relevant paths
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath(`/products/${id}`);
+
+    // Revalidate by tag
+    revalidateTag("products");
+    revalidateTag("featured-products");
+
     return { success: "Product updated successfully." };
   } catch (error) {
     console.error(error);
@@ -82,15 +101,24 @@ export const updateProduct = async (
 
 export const deleteProduct = async (id: string) => {
   try {
-    const products = await db.products.delete({ where: { id } });
+    const product = await db.products.delete({ where: { id } });
 
     await db.logs.create({
       data: {
         action: `Deleted product ${
-          products.name
+          product.name
         } at ${new Date().toLocaleString()}`,
       },
     });
+
+    // Revalidate relevant paths
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath(`/products/${id}`);
+
+    // Revalidate by tag
+    revalidateTag("products");
+    revalidateTag("featured-products");
 
     return { success: "Product deleted successfully." };
   } catch (error) {

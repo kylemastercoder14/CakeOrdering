@@ -3,6 +3,9 @@ import ProductList from "@/components/global/site/product-list";
 import db from "@/lib/db";
 import Footer from "@/components/global/site/footer";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const Page = async () => {
   const products = await db.products.findMany({
     include: {
