@@ -119,7 +119,7 @@ const SignupForm = ({
         isOpen={privacyModal}
         onClose={() => setPrivacyModal(false)}
         title="Privacy Policy"
-        className="max-w-lg"
+        className="max-w-2xl"
       >
         <div className="prose max-h-[70vh] overflow-y-auto p-4">
           {privacyPolicy?.content ? (
@@ -135,7 +135,7 @@ const SignupForm = ({
         isOpen={termsModal}
         onClose={() => setTermsModal(false)}
         title="Terms & Conditions"
-        className="max-w-lg"
+        className="max-w-2xl"
       >
         <div className="prose max-h-[70vh] overflow-y-auto p-4">
           {termsOfService?.content ? (
