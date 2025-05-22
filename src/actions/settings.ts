@@ -186,11 +186,16 @@ export const updateSocialsInfo = async (
 
 export const updateFaqsInfo = async (
   faqs: {
+    id?: string;
     question: string;
     answer: string;
   }[]
 ) => {
   try {
+    // First delete all existing FAQs
+    await db.faqs.deleteMany();
+
+    // Then create new ones (this ensures no duplicates)
     await db.faqs.createMany({
       data: faqs.map((faq) => ({
         question: faq.question,
@@ -200,15 +205,36 @@ export const updateFaqsInfo = async (
 
     await db.logs.create({
       data: {
-        action: `Updated faqs info at ${new Date().toLocaleString()}`,
+        action: `Updated FAQs at ${new Date().toLocaleString()}`,
       },
     });
 
-    return { success: "Faqs information updated." };
+    return { success: "FAQs updated successfully." };
   } catch (error) {
     console.error(error);
     return {
-      error: "An error occurred while updating the faqs information.",
+      error: "An error occurred while updating the FAQs.",
+    };
+  }
+};
+
+export const deleteFaq = async (id: string) => {
+  try {
+    await db.faqs.delete({
+      where: { id },
+    });
+
+    await db.logs.create({
+      data: {
+        action: `Deleted FAQ with ID: ${id} at ${new Date().toLocaleString()}`,
+      },
+    });
+
+    return { success: "FAQ deleted successfully." };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "An error occurred while deleting the FAQ.",
     };
   }
 };
