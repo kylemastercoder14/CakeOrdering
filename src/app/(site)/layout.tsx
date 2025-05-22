@@ -6,7 +6,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main>
       <Navigation />
-      <main className="h-screen bg-[#D0F2B7]  w-full">{children}</main>
+      <main className="h-screen bg-[#D0F2B7] w-full">{children}</main>
       <ChatBot />
     </main>
   );

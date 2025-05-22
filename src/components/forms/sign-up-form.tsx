@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -32,9 +33,7 @@ const RegistrationBaseSchema = z.object({
   phoneNumber: z.string().min(1, "Phone number is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
-  acceptTerms: z.boolean().refine((val) => val, {
-    message: "You must accept the terms and conditions",
-  }),
+  acceptTerms: z.boolean().optional(),
 });
 
 // Add password matching refinement
@@ -68,7 +67,7 @@ const SignupForm = ({
       phoneNumber: "",
       password: "",
       confirmPassword: "",
-      acceptTerms: true,
+      acceptTerms: false,
     },
   });
 
@@ -102,9 +101,24 @@ const SignupForm = ({
       } else {
         toast.error(res.error);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("An error occurred. Please try again later.");
+
+      // Handle specific Clerk errors
+      if (error.errors) {
+        const clerkError = error.errors[0];
+        if (clerkError.code === "form_identifier_exists") {
+          toast.error(
+            "This email is already registered. Please use a different email or sign in."
+          );
+        } else {
+          toast.error(
+            clerkError.message || "An error occurred during sign up."
+          );
+        }
+      } else {
+        toast.error("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
@@ -307,7 +321,7 @@ const SignupForm = ({
                     <Button
                       type="button"
                       variant="link"
-                      className="p-0 h-auto"
+                      className="p-0 h-auto underline"
                       onClick={() => setTermsModal(true)}
                     >
                       Terms & Conditions
@@ -316,7 +330,7 @@ const SignupForm = ({
                     <Button
                       type="button"
                       variant="link"
-                      className="p-0 h-auto"
+                      className="p-0 h-auto underline"
                       onClick={() => setPrivacyModal(true)}
                     >
                       Privacy Policy

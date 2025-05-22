@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import db from "@/lib/db";
@@ -15,6 +16,15 @@ export const createAccount = async (
   id: string
 ) => {
   try {
+    // Check if email already exists
+    const existingUser = await db.users.findUnique({
+      where: { email: values.email },
+    });
+
+    if (existingUser) {
+      return { error: "Email already in use. Please use a different email." };
+    }
+
     const name = values.firstName + " " + values.lastName;
     await db.users.create({
       data: {
@@ -28,9 +38,20 @@ export const createAccount = async (
     });
 
     return { success: "Account created successfully." };
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return { error: "An error occurred while creating the account." };
+
+    // Handle specific Prisma errors
+    if (error.code === "P2002") {
+      return {
+        error:
+          "This email is already registered. Please use a different email.",
+      };
+    }
+
+    return {
+      error: "An error occurred while creating the account. Please try again.",
+    };
   }
 };
 
