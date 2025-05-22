@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-// Define the ResetPasswordSchema with strong password requirements
 export const ResetPasswordSchema = z
   .object({
     password: z
@@ -65,13 +64,11 @@ const ResetPasswordForm = () => {
 
     setIsSubmitting(true);
     try {
-      // First, reset the firstFactor to ensure we're using the code correctly
       await signIn.create({
         strategy: "reset_password_email_code",
         identifier: email,
       });
 
-      // Now attempt the reset with the code provided in URL params
       const result = await signIn.attemptFirstFactor({
         strategy: "reset_password_email_code",
         code,
@@ -97,7 +94,7 @@ const ResetPasswordForm = () => {
     }
   };
 
-  if (!isLoaded) return null;
+  if (!isLoaded) return <div>Loading authentication...</div>;
 
   if (!email || !code) {
     return (
