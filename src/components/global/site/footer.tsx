@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <>
-      <Modal className='max-w-2xl' isOpen={open} onClose={() => setOpen(false)}>
+      <Modal className="max-w-2xl" isOpen={open} onClose={() => setOpen(false)}>
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d10086.738098108985!2d120.90584664943466!3d14.336027927910983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sCluster%205%2C%20Bella%20Vista%20Subdivision%20General%20Trias%20%26%20Dasmari%C3%B1as!5e1!3m2!1sen!2sph!4v1747063838229!5m2!1sen!2sph"
           width="600"
@@ -41,7 +41,11 @@ const Footer = () => {
           <Link className="hover:underline" href="/cart">
             Cart Section
           </Link>
-          <Link className="hover:underline" href="#" onClick={() => setOpen(true)}>
+          <Link
+            className="hover:underline"
+            href="#"
+            onClick={() => setOpen(true)}
+          >
             Site Map
           </Link>
           <Link className="hover:underline" href="/order-history">
@@ -78,7 +82,7 @@ const Footer = () => {
           <div>
             <p>Social Media</p>
             <div className="flex mt-2 items-center gap-2">
-              <Link href="https://www.facebook.com/" target="_blank">
+              <Link href="https://www.facebook.com/marianhomebakes" target="_blank">
                 <Image
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/512px-2021_Facebook_icon.svg.png?20220821121039"
                   alt="Facebook"

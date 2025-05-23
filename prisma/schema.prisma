@@ -21,9 +21,10 @@ model Users {
   dateOfBirth     String?
   customizedCount Int?    @default(3)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Orders    Orders[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Orders         Orders[]
+  CustomizedCake CustomizedCake[]
 }
 
 model Categories {
@@ -85,8 +86,9 @@ model Orders {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  orderItems OrderItems[]
-  refund     Refund[]
+  orderItems     OrderItems[]
+  refund         Refund[]
+  CustomizedCake CustomizedCake[]
 
   @@index([userId])
 }
@@ -256,4 +258,13 @@ model CustomizedCake {
   customerPhone   String?
   deliveryDate    DateTime?
   deliveryAddress String?
+
+  orderId String?
+  order   Orders? @relation(fields: [orderId], references: [id])
+
+  userId String?
+  user   Users?  @relation(fields: [userId], references: [id])
+
+  @@index([orderId])
+  @@index([userId])
 }

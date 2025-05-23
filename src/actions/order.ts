@@ -2,7 +2,7 @@
 "use server";
 
 import db from "@/lib/db";
-import { useUser } from "../hooks/use-user";
+import { useUser } from "@/hooks/use-user";
 
 export const createOrder = async ({
   userId,

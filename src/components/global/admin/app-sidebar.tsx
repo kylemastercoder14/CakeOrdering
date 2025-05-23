@@ -46,6 +46,10 @@ const data = {
           title: "Customers",
           url: "/admin/customers",
         },
+        {
+          title: "Customized Cakes",
+          url: "/admin/customized-cakes",
+        },
       ],
     },
     {

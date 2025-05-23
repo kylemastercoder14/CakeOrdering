@@ -53,7 +53,7 @@ const Page = () => {
   };
 
   return (
-    <div className="flex p-5 flex-col items-center w-full bg-[#D0F2B7] h-screen justify-center">
+    <div className="flex p-5 flex-col items-center w-full bg-[#D0F2B7] h-screen overflow-y-auto justify-center">
       <div
         id="clerk-captcha"
         className="my-4 min-h-[78px] w-full max-w-md"
@@ -61,7 +61,7 @@ const Page = () => {
       <Button
         onClick={() => signInWith("oauth_google")}
         size="lg"
-        className="lg:px-40"
+        className="w-full"
         disabled={isLoading.google}
       >
         {isLoading.google ? (
@@ -71,7 +71,7 @@ const Page = () => {
             <Image
               src="/assets/google.svg"
               alt="Google"
-              className="mr-10"
+              className="lg:mr-10 mr-2"
               width={25}
               height={25}
             />
