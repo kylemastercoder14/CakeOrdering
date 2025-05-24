@@ -12,7 +12,7 @@ const ProductCreation = async () => {
   });
   return (
     <div className="lg:px-[200px] px-10">
-      <h1 className="text-center text-4xl font-sans text-[#251201] font-bold">
+      <h1 className="text-center text-4xl font-sans text-[#251201] font-semibold">
         Product Creation
       </h1>
       <div className="mt-3 flex items-center text-[#251201] justify-center gap-2">

@@ -61,7 +61,7 @@ const ProductList = ({
         Where Creativity Meets Flavor – Discover Cakes Beyond Imagination.
       </p>
       <div className="grid mt-8 lg:grid-cols-10 grid-cols-1 gap-20">
-        <div className="lg:col-span-3 border bg-[#DCF6AA] rounded-md shadow-md flex flex-col text-center p-10 w-full">
+        <div className="lg:col-span-3 border bg-[#0F2A1D] text-white rounded-md shadow-md flex flex-col text-center p-10 w-full">
           <p className="font-semibold text-2xl mb-5">Filter Products</p>
 
           {/* Best Choice & Featured Filters */}
@@ -69,8 +69,8 @@ const ProductList = ({
             onClick={() => setFilterType("all")}
             className={`py-2 px-4 text-sm cursor-pointer mt-2 ${
               filterType === "all"
-                ? "bg-[#251201] text-white font-bold"
-                : "hover:bg-[#251201]/20"
+                ? "bg-[#C3DCAA] text-black font-bold"
+                : "hover:bg-[#C3DCAA]/20"
             } rounded-md transition`}
           >
             All Products
@@ -79,8 +79,8 @@ const ProductList = ({
             onClick={() => setFilterType("best")}
             className={`py-2 px-4 text-sm cursor-pointer mt-2 ${
               filterType === "best"
-                ? "bg-[#251201] text-white font-bold"
-                : "hover:bg-[#251201]/20"
+                ? "bg-[#C3DCAA] text-white font-bold"
+                : "hover:bg-[#C3DCAA]/20"
             } rounded-md transition`}
           >
             Best Choice (Top Sellers)
@@ -89,8 +89,8 @@ const ProductList = ({
             onClick={() => setFilterType("featured")}
             className={`py-2 px-4 text-sm cursor-pointer mt-2 ${
               filterType === "featured"
-                ? "bg-[#251201] text-white font-bold"
-                : "hover:bg-[#251201]/20"
+                ? "bg-[#C3DCAA] text-black font-bold"
+                : "hover:bg-[#C3DCAA]/20"
             } rounded-md transition`}
           >
             Featured Products
@@ -102,8 +102,8 @@ const ProductList = ({
             onClick={() => handleCategorySelect(null)}
             className={`py-2 px-4 text-sm cursor-pointer ${
               !selectedCategory
-                ? "bg-[#251201] text-white font-bold"
-                : "hover:bg-[#251201]/20"
+                ? "bg-[#C3DCAA] text-black font-bold"
+                : "hover:bg-[#C3DCAA]/20"
             } rounded-md transition`}
           >
             All Categories
@@ -114,8 +114,8 @@ const ProductList = ({
               onClick={() => handleCategorySelect(category.id)}
               className={`py-2 px-4 text-sm cursor-pointer mt-2 ${
                 selectedCategory === category.id
-                  ? "bg-[#251201] text-white font-bold"
-                  : "hover:bg-[#251201]/20"
+                  ? "bg-[#C3DCAA] text-black font-bold"
+                  : "hover:bg-[#C3DCAA]/20"
               } rounded-md transition`}
             >
               {category.name}
@@ -124,7 +124,7 @@ const ProductList = ({
         </div>
         <div className="lg:col-span-7 w-full">
           {filteredProducts.length > 0 ? (
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
+            <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-5">
               {filteredProducts.map((product) => (
                 <div key={product.id}>
                   <div className="relative w-full h-60">
@@ -147,7 +147,7 @@ const ProductList = ({
                   <p className="text-sm font-semibold mt-2 text-center">
                     ₱{product.price.toFixed(2)}
                   </p>
-                  <Button className="mt-2 w-full" size="sm">
+                  <Button className="mt-2 w-36 flex items-center justify-center mx-auto" size="sm">
                     <Link href={`/products/${product.id}`}>
                       View Details &nbsp; &rarr;
                     </Link>
@@ -156,7 +156,7 @@ const ProductList = ({
               ))}
             </div>
           ) : (
-            <p className="text-center text-[#251201] text-2xl flex flex-col items-center justify-center h-full mt-10">
+            <p className="text-center text-[#C3DCAA] text-2xl flex flex-col items-center justify-center h-full mt-10">
               No products found.
             </p>
           )}

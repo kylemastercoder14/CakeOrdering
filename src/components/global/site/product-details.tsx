@@ -36,7 +36,7 @@ const ProductDetails = ({
     });
   };
   return (
-    <div className="grid mt-10 lg:grid-cols-5 grid-cols-1 gap-10">
+    <div className="grid mt-10 lg:grid-cols-4 grid-cols-1 gap-20">
       <div className="lg:col-span-2">
         <div className="relative w-full h-[500px]">
           <Image
@@ -47,7 +47,7 @@ const ProductDetails = ({
           />
         </div>
       </div>
-      <div className="lg:col-span-3">
+      <div className="lg:col-span-2">
         <h3 className="text-3xl font-bold text-[#452E19] mb-2">
           {product?.name}
         </h3>
@@ -55,8 +55,11 @@ const ProductDetails = ({
         <p className="font-semibold text-xl mt-2">
           ₱ {product?.price.toFixed(2)}
         </p>
+        <p className="mt-2 text-lg">Flavor: Classic vanilla chiffon with whipped cream frosting</p>
+        <p className="mt-2 text-lg">Sizes Available: 6-inch round (standard) – serves 6–8</p>
+        <p className="mt-2 text-lg">Allergens: Contain eggs, dairy, gluten</p>
         <p className="mt-2 text-lg">{product?.description}</p>
-        <div className="flex bg-[#C3DCAA] px-5 h-10 w-60 mt-5 rounded-md justify-center items-center">
+        <div className="flex bg-[#0F2A1D] text-white px-5 h-10 w-60 mt-5 rounded-md justify-center items-center">
           <button onClick={handleDecrement}>
             <Minus />
           </button>
@@ -71,16 +74,16 @@ const ProductDetails = ({
             <Plus />
           </button>
         </div>
-        <Button size="lg" onClick={handleAddToCart} className="mt-10 w-full">
+        <Button size="lg" onClick={handleAddToCart} className="mt-5 flex items-center justify-center w-60">
           Add to cart
         </Button>
         <Button
           onClick={() => router.push("/products")}
           size="lg"
           variant="ghost"
-          className="w-full mt-3 hover:bg-transparent hover:underline"
+          className="mt-3 hover:bg-transparent hover:underline w-60"
         >
-          Continue Shopping &rarr;
+          Continue Shopping
         </Button>
       </div>
     </div>

@@ -10,7 +10,7 @@ html,
 body,
 :root {
   height: 100%;
-  background-color: #D0F2B7;
+  background-color: white;
 }
 
 @layer base {

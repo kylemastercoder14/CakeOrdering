@@ -16,10 +16,10 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
-import useCart from '@/hooks/use-cart';
+import useCart from "@/hooks/use-cart";
 
 const Navigation = () => {
-  const {items} = useCart();
+  const { items } = useCart();
   const { user } = useUser();
   const pathname = usePathname();
   const router = useRouter();
@@ -50,24 +50,31 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed top-0 bg-[#C3DCAA] w-full py-2 transition-all lg:px-[200px] px-10 z-50 flex justify-between items-center duration-500 ${
+      className={`fixed top-0 bg-[#0F2A1D] w-full py-2 transition-all lg:px-[200px] px-10 z-50 flex justify-between items-center duration-500 ${
         isNavbarVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       <div className="flex items-center lg:gap-10 gap-5">
-        <Link href="/">
-          <Image src="/assets/logo.png" alt="Logo" width={80} height={80} />
-        </Link>
+        <div className="relative lg:size-16 size-12">
+          <Link href="/">
+            <Image
+              src="/assets/logo.png"
+              alt="Logo"
+              fill
+              className="w-full h-full"
+            />
+          </Link>
+        </div>
         {/* Desktop Navigation */}
         <ul className="lg:flex hidden gap-5">
           {["/", "/about-us", "/products", "/blogs", "/contact-us"].map(
             (route, index) => (
               <li key={index}>
                 <Link
-                  className={`px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-[#251201] hover:text-white text-black transition-colors duration-300 text-sm ${
+                  className={`px-4 flex items-center gap-2 hover:bg-[#C3DCAA] py-2 rounded-lg hover:text-black transition-colors duration-300 text-sm ${
                     pathname === route
-                      ? "bg-[#251201] text-white border-b-2 border-zinc-600"
-                      : ""
+                      ? "text-black bg-[#C3DCAA]"
+                      : "text-white"
                   }`}
                   href={route}
                 >
@@ -92,22 +99,24 @@ const Navigation = () => {
         <div className="lg:hidden flex items-center">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? (
-              <X className="size-6" />
+              <X className="size-6 text-white" />
             ) : (
-              <Menu className="size-6" />
+              <Menu className="size-6 text-white" />
             )}
           </button>
         </div>
         {/* Mobile Navigation Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 w-full bg-[#C3DCAA] shadow-lg p-5">
+          <div className="lg:hidden absolute top-full left-0 w-full bg-[#0F2A1D] shadow-lg p-5">
             <ul className="flex flex-col gap-4">
               {["/", "/about", "/products", "/blogs", "/contact-us"].map(
                 (route, index) => (
                   <li key={index}>
                     <Link
-                      className={`flex items-center gap-2 py-2 text-black hover:text-white hover:bg-[#251201] px-4 rounded-lg transition-colors duration-300 ${
-                        pathname === route ? "bg-[#251201] text-white" : ""
+                      className={`flex items-center gap-2 text-black hover:bg-[#C3DCAA] py-2 rounded-lg hover:text-black px-4 transition-colors duration-300 ${
+                        pathname === route
+                          ? "text-black bg-[#C3DCAA]"
+                          : "text-white"
                       }`}
                       href={route}
                       onClick={() => setIsMenuOpen(false)}
@@ -138,13 +147,23 @@ const Navigation = () => {
         {user ? (
           <UserButton showName />
         ) : (
-          <Button onClick={() => router.push("/sign-up")}>
+          <Button
+            className="bg-[#C3DCAA] hover:bg-[#C3DCAA]/80 text-black"
+            onClick={() => router.push("/sign-up")}
+          >
             Create an account
           </Button>
         )}
-        <p className="mr-3 ml-5">|</p>
-        <Button onClick={() => router.push("/cart")} className="rounded-full relative" variant="default" size="icon">
-          <p className='absolute -top-1 text-[8px] -right-1 bg-red-600 rounded-full size-4 flex items-center justify-center'>{items.length}</p>
+        <p className="mr-3 ml-5 text-white">|</p>
+        <Button
+          onClick={() => router.push("/cart")}
+          className="rounded-full bg-[#C3DCAA] hover:bg-[#C3DCAA]/80 text-black relative"
+          variant="default"
+          size="icon"
+        >
+          <p className="absolute -top-1 text-[8px] -right-1 bg-red-600 text-white rounded-full size-4 flex items-center justify-center">
+            {items.length}
+          </p>
           <ShoppingCart className="size-2" />
         </Button>
       </div>

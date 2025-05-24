@@ -15,10 +15,10 @@ const Page = async () => {
   });
   const categories = await db.categories.findMany();
   return (
-    <>
+    <div className='h-screen'>
       <ProductList products={products} categories={categories} />
       <Footer />
-    </>
+    </div>
   );
 };
 

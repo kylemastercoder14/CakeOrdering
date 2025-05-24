@@ -7,18 +7,18 @@ import Footer from "@/components/global/site/footer";
 
 export default function Home() {
   return (
-    <div className="h-screen relative bg-[#D0F2B7] w-full">
+    <div className="h-screen relative bg-white w-full">
       <Hero />
-      <section className="bg-[#D0F2B7]">
+      <section className="bg-white">
         <Feature />
       </section>
-      <section className="bg-[#D0F2B7] pt-24">
+      <section className="bg-white pt-24">
         <ProductCatalog />
       </section>
-      <section className="bg-[#D0F2B7] pt-24">
+      <section className="bg-white pt-24">
         <ProductCreation />
       </section>
-      <section className="bg-[#D0F2B7] pt-24">
+      <section className="bg-white pt-24">
         <PromotionBanner />
       </section>
       <Footer />

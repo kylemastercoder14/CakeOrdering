@@ -19,7 +19,7 @@ const Footer = () => {
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       </Modal>
-      <footer className="py-24 lg:px-[200px] px-10 lg:place-content-center lg:place-items-center bg-[#452E19] text-white grid lg:grid-cols-4 grid-cols-1 gap-10">
+      <footer className="py-24 lg:px-[200px] px-10 lg:place-content-center lg:place-items-center bg-[#0F2A1D] text-white grid lg:grid-cols-4 grid-cols-1 gap-10">
         <div className="flex flex-col space-y-2">
           <Link className="hover:underline" href="/">
             Home
