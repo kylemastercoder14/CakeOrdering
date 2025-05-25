@@ -18,11 +18,11 @@ const Hero = () => {
       <div className="absolute flex items-center gap-2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
         <Button
           onClick={() => router.push("/customization/theme")}
-          className="mt-5 bg-[#C3DCAA] text-black hover:bg-[#C3DCAA] h-24 rounded-xl text-5xl"
+          className="mt-5 bg-[#C3DCAA] text-black hover:bg-[#C3DCAA] h-20 rounded-xl text-3xl"
           size="lg"
         >
           Customize your cake
-          <Image src="/cursor.png" alt="Cursor" width={120} height={120} />
+          <Image src="/cursor.png" alt="Cursor" width={80} height={80} />
         </Button>
       </div>
     </div>

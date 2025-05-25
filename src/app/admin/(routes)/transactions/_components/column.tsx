@@ -81,10 +81,14 @@ export const columns: ColumnDef<OrderColumn>[] = [
       const status = row.original.orderStatus;
       const statusClass =
         status === "Pending"
-          ? "bg-yellow-600"
-          : status === "Rejected"
-          ? "bg-red-600"
-          : "bg-green-600";
+          ? "bg-yellow-500"
+          : status === "Approved"
+            ? "bg-blue-500"
+            : status === "Rejected"
+              ? "bg-red-500"
+              : status === "Completed"
+                ? "bg-green-500"
+                : "bg-gray-500";
 
       return (
         <span
@@ -98,7 +102,9 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: "action",
     header: "",
-    cell: ({ row }) => <CellAction id={row.original.id} status={row.original.orderStatus} />,
+    cell: ({ row }) => (
+      <CellAction id={row.original.id} status={row.original.orderStatus} />
+    ),
   },
 ];
 
@@ -164,8 +170,8 @@ export const columns2: ColumnDef<RefundColumn>[] = [
         status === "Pending"
           ? "bg-yellow-600"
           : status === "Rejected"
-          ? "bg-red-600"
-          : "bg-green-600";
+            ? "bg-red-600"
+            : "bg-green-600";
 
       return (
         <span

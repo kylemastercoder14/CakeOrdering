@@ -29,7 +29,6 @@ const RegistrationBaseSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
-  address: z.string().min(1, "Address is required"),
   phoneNumber: z.string().min(1, "Phone number is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
@@ -64,7 +63,6 @@ const SignupForm = ({
       firstName: "",
       lastName: "",
       email: "",
-      address: "",
       phoneNumber: "",
       password: "",
       confirmPassword: "",
@@ -97,7 +95,7 @@ const SignupForm = ({
         {
           duration: 20000,
           id: "password-requirements",
-          position: "bottom-right"
+          position: "bottom-right",
         }
       );
       passwordToastShown.current = true;
@@ -119,6 +117,7 @@ const SignupForm = ({
         toast.success(res.success);
         setTimeout(() => {
           router.push("/");
+          window.location.href = "/";
         }, 2000);
       } else {
         toast.error(res.error);

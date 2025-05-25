@@ -8,7 +8,6 @@ export const createAccount = async (
     firstName: string;
     lastName: string;
     email: string;
-    address: string;
     phoneNumber: string;
     password: string;
     confirmPassword: string;
@@ -30,7 +29,6 @@ export const createAccount = async (
       data: {
         name,
         email: values.email,
-        address: values.address,
         phoneNumber: values.phoneNumber,
         password: values.password,
         clerkId: id,

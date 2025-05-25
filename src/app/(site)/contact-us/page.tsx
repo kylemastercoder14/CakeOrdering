@@ -7,7 +7,7 @@ import Footer from "@/components/global/site/footer";
 
 const Page = () => {
   return (
-    <div className="h-screen bg-[#f5f5f5]">
+    <div className="h-screen bg-white">
       <div className="relative h-[38vh] bg-[#E3EED4] w-full">
         <div className="absolute inset-0">
           <h3 className="text-center pt-40 uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-6xl mb-5">
@@ -66,14 +66,16 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d10086.738098108985!2d120.90584664943466!3d14.336027927910983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sCluster%205%2C%20Bella%20Vista%20Subdivision%20General%20Trias%20%26%20Dasmari%C3%B1as!5e1!3m2!1sen!2sph!4v1747063838229!5m2!1sen!2sph"
-        width="100%"
-        height="100%"
-        allowFullScreen
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-      ></iframe>
+      <div className="lg:px-[200px] pb-10 px-10">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d10086.738098108985!2d120.90584664943466!3d14.336027927910983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sCluster%205%2C%20Bella%20Vista%20Subdivision%20General%20Trias%20%26%20Dasmari%C3%B1as!5e1!3m2!1sen!2sph!4v1747063838229!5m2!1sen!2sph"
+          width="100%"
+          height="300"
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
       <Footer />
     </div>
   );

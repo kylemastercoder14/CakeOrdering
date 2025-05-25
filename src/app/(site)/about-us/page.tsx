@@ -7,17 +7,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Page = () => {
   return (
-    <div className="min-h-screen w-full overflow-x-hidden">
+    <div className="min-h-screen w-full mt-20 overflow-x-hidden bg-white">
       {/* Hero Section */}
-      <div className="relative w-full min-h-screen">
-        <Image
-          src="/assets/about.jpg"
-          fill
-          className="w-full h-full object-cover"
-          alt="About"
-          priority
-        />
-        <div className="absolute bg-[#D0F2B7]/50 inset-0 w-full h-full" />
+      <div className="relative w-full min-h-screen bg-white">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
@@ -52,14 +44,7 @@ const Page = () => {
       </div>
 
       {/* Core Values Section */}
-      <div className="relative w-full min-h-screen">
-        <Image
-          src="/assets/about-2.jpg"
-          fill
-          className="w-full h-full object-cover"
-          alt="About"
-        />
-        <div className="absolute bg-[#D0F2B7]/50 inset-0 w-full h-full" />
+      <div className="relative w-full min-h-screen bg-white">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div className="max-w-4xl mx-auto">
@@ -119,14 +104,7 @@ const Page = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="relative w-full min-h-screen">
-        <Image
-          src="/assets/about-2.jpg"
-          fill
-          className="w-full h-full object-cover"
-          alt="About"
-        />
-        <div className="absolute bg-[#D0F2B7]/50 inset-0 w-full h-full" />
+      <div className="relative w-full mb-20 min-h-screen bg-white">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <h3 className="text-center font-bold text-4xl mb-10">
@@ -199,7 +177,6 @@ const Page = () => {
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

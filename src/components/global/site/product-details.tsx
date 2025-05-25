@@ -56,13 +56,13 @@ const ProductDetails = ({
           ₱ {product?.price.toFixed(2)}
         </p>
         <p className="mt-2 text-lg">
-          Flavor: {product?.flavors.join(", ") || "Not specified"}
+          <strong>Flavor</strong>: {product?.flavors.join(", ") || "Not specified"}
         </p>
         <p className="mt-2 text-lg">
-          Sizes Available: {product?.sizes.join(", ") || " Not specified"}
+          <strong>Sizes Available</strong>: {product?.sizes.join(", ") || " Not specified"}
         </p>
         <p className="mt-2 text-lg">
-          Allergens: {product?.allergens.join(", ") || " Not specified"}
+          <strong>Allergens</strong>: {product?.allergens.join(", ") || " Not specified"}
         </p>
         <p className="mt-2 text-lg">{product?.description}</p>
         <div className="flex bg-[#0F2A1D] text-white px-5 h-10 w-60 mt-5 rounded-md justify-center items-center">

@@ -22,7 +22,7 @@ const BlogCard = ({
           className="w-full h-full object-cover rounded-md"
         />
       </div>
-      <h3 className="text-xl font-semibold mt-2">{title}</h3>
+      <h3 className="text-xl font-semibold line-clamp-2 mt-2">{title}</h3>
       <div className="flex text-sm items-center gap-2">
         <p>{datePosted} • </p>
         <p>By Admin</p>

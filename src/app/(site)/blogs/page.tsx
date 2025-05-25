@@ -13,7 +13,7 @@ const Page = async () => {
     },
   });
   return (
-    <div className="h-screen bg-[#f5f5f5]">
+    <div className="h-screen bg-white">
       <div className="relative h-[38vh] bg-[#E3EED4] w-full">
         <div className="absolute inset-0">
           <h3 className="text-center pt-40 uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-6xl mb-5">
@@ -28,7 +28,7 @@ const Page = async () => {
       </div>
       <div className="lg:px-[200px] px-10 pt-10 pb-24">
         <h1 className="font-semibold text-2xl">Blogs</h1>
-        <div className="grid lg:grid-cols-4 grid-cols-1 gap-5 mt-5">
+        <div className="grid lg:grid-cols-4 grid-cols-1 gap-10 mt-5">
           {data.map((blog) => (
             <BlogCard
               key={blog.id}

@@ -6,8 +6,8 @@ import Image from "next/image";
 import { differenceInHours, format } from "date-fns";
 import { Modal } from "@/components/ui/modal";
 import { toast } from "sonner";
-import { useRouter } from 'next/navigation';
-import { cancelOrder } from '@/actions/order';
+import { useRouter } from "next/navigation";
+import { cancelOrder } from "@/actions/order";
 
 // Define types for the data structures
 type Product = {
@@ -135,6 +135,19 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
   const [cancellationReason, setCancellationReason] = useState<string>("");
   const [otherReason, setOtherReason] = useState<string>("");
 
+  // Refund modal states
+  const [refundModal, setRefundModal] = useState<boolean>(false);
+  const [refundingOrderId, setRefundingOrderId] = useState<string | null>(null);
+  const [refundReason, setRefundReason] = useState<string>("");
+  const [otherRefundReason, setOtherRefundReason] = useState<string>("");
+  const [refundDetails, setRefundDetails] = useState<string>("");
+
+  // Review modal states
+  const [reviewModal, setReviewModal] = useState<boolean>(false);
+  const [reviewingOrderId, setReviewingOrderId] = useState<string | null>(null);
+  const [rating, setRating] = useState<number>(0);
+  const [reviewComment, setReviewComment] = useState<string>("");
+
   // Toggle order details
   const toggleOrderDetails = (orderId: string) => {
     if (activeOrderId === orderId) {
@@ -169,7 +182,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
         : cancellationReason;
 
     try {
-      const response = await cancelOrder(cancellingOrderId, finalReason)
+      const response = await cancelOrder(cancellingOrderId, finalReason);
 
       if (response.error) {
         toast.error(response.error);
@@ -185,6 +198,79 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
       setCancellationReason("");
       setOtherReason("");
       setCancelModal(false);
+    }
+  };
+
+  // Handle refund request click
+  const handleRefundClick = (orderId: string) => {
+    setRefundingOrderId(orderId);
+    setRefundReason("");
+    setOtherRefundReason("");
+    setRefundDetails("");
+    setRefundModal(true);
+  };
+
+  // Handle refund submission
+  const submitRefund = async () => {
+    if (!refundingOrderId) return;
+
+    const finalReason =
+      refundReason === "other" ? `Other: ${otherRefundReason}` : refundReason;
+
+    try {
+      // Here you would typically call an API to submit the refund request
+      console.log("Submitting refund request for order:", refundingOrderId);
+      console.log("Reason:", finalReason);
+      console.log("Details:", refundDetails);
+
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      router.refresh();
+      toast.success("Refund request submitted successfully.");
+    } catch (error) {
+      console.error("Refund request failed:", error);
+      toast.error("Failed to submit refund request. Please try again later.");
+    } finally {
+      setRefundingOrderId(null);
+      setRefundReason("");
+      setOtherRefundReason("");
+      setRefundDetails("");
+      setRefundModal(false);
+    }
+  };
+
+  // Handle review click
+  const handleReviewClick = (orderId: string) => {
+    setReviewingOrderId(orderId);
+    setRating(0);
+    setReviewComment("");
+    setReviewModal(true);
+  };
+
+  // Handle review submission
+  const submitReview = async () => {
+    if (!reviewingOrderId || rating === 0) return;
+
+    try {
+      // Here you would typically call an API to submit the review
+      console.log("Submitting review for order:", reviewingOrderId);
+      console.log("Rating:", rating);
+      console.log("Comment:", reviewComment);
+
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      router.refresh();
+      toast.success("Thank you for your review!");
+    } catch (error) {
+      console.error("Review submission failed:", error);
+      toast.error("Failed to submit review. Please try again later.");
+    } finally {
+      setReviewingOrderId(null);
+      setRating(0);
+      setReviewComment("");
+      setReviewModal(false);
     }
   };
 
@@ -205,6 +291,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
 
   return (
     <div className="min-h-screen pt-32 pb-16">
+      {/* Cancel Order Modal */}
       <Modal isOpen={cancelModal} onClose={() => setCancelModal(false)}>
         <div>
           <h3 className="text-lg font-bold text-[#452E19] mb-4">
@@ -278,6 +365,176 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
           </div>
         </div>
       </Modal>
+
+      {/* Refund Request Modal */}
+      <Modal isOpen={refundModal} onClose={() => setRefundModal(false)}>
+        <div>
+          <h3 className="text-lg font-bold text-[#452E19] mb-4">
+            Request Refund
+          </h3>
+          <p className="text-[#452E19]/80 mb-4">
+            Please provide details about your refund request:
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-[#452E19] mb-2">
+                Reason for Refund
+              </label>
+              <div className="space-y-3">
+                {[
+                  "Change of mind",
+                  "Lack of budget",
+                  "Duplicate order",
+                  "Product not as described",
+                  "other",
+                ].map((reason) => (
+                  <div key={reason} className="flex items-center">
+                    <input
+                      type="radio"
+                      id={`refund-reason-${reason}`}
+                      name="refundReason"
+                      value={reason}
+                      checked={refundReason === reason}
+                      onChange={() => setRefundReason(reason)}
+                      className="h-4 w-4 text-[#0F2A1D] focus:ring-[#0F2A1D]"
+                    />
+                    <label
+                      htmlFor={`refund-reason-${reason}`}
+                      className="ml-2 text-sm text-[#452E19]"
+                    >
+                      {reason === "other" ? "Other (please specify)" : reason}
+                    </label>
+                  </div>
+                ))}
+
+                {refundReason === "other" && (
+                  <input
+                    type="text"
+                    value={otherRefundReason}
+                    onChange={(e) => setOtherRefundReason(e.target.value)}
+                    placeholder="Please specify your reason..."
+                    className="w-full mt-2 p-2 border border-gray-300 rounded-md text-sm text-[#452E19]"
+                  />
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#452E19] mb-2">
+                Additional Details
+              </label>
+              <textarea
+                value={refundDetails}
+                onChange={(e) => setRefundDetails(e.target.value)}
+                placeholder="Please provide any additional information about your refund request..."
+                className="w-full p-2 border border-gray-300 rounded-md text-sm text-[#452E19]"
+                rows={4}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-3 mt-6">
+            <button
+              onClick={() => {
+                setRefundingOrderId(null);
+                setRefundModal(false);
+              }}
+              className="px-4 py-2 text-sm font-medium text-[#452E19] bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={submitRefund}
+              disabled={
+                !refundReason ||
+                (refundReason === "other" && !otherRefundReason)
+              }
+              className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
+                !refundReason ||
+                (refundReason === "other" && !otherRefundReason)
+                  ? "bg-blue-300 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600"
+              }`}
+            >
+              Submit Refund Request
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Review Modal */}
+      <Modal isOpen={reviewModal} onClose={() => setReviewModal(false)}>
+        <div>
+          <h3 className="text-lg font-bold text-[#452E19] mb-4">
+            Write a Review
+          </h3>
+          <p className="text-[#452E19]/80 mb-4">
+            Share your experience with this order:
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-[#452E19] mb-2">
+                Rating
+              </label>
+              <div className="flex items-center space-x-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className="text-2xl focus:outline-none"
+                  >
+                    {star <= rating ? "★" : "☆"}
+                  </button>
+                ))}
+                <span className="text-sm text-[#452E19]/70 ml-2">
+                  {rating > 0
+                    ? `${rating} star${rating > 1 ? "s" : ""}`
+                    : "Select rating"}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#452E19] mb-2">
+                Your Review
+              </label>
+              <textarea
+                value={reviewComment}
+                onChange={(e) => setReviewComment(e.target.value)}
+                placeholder="What did you like or dislike about your order?"
+                className="w-full p-2 border border-gray-300 rounded-md text-sm text-[#452E19]"
+                rows={4}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-3 mt-6">
+            <button
+              onClick={() => {
+                setReviewingOrderId(null);
+                setReviewModal(false);
+              }}
+              className="px-4 py-2 text-sm font-medium text-[#452E19] bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={submitReview}
+              disabled={rating === 0}
+              className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
+                rating === 0
+                  ? "bg-green-300 cursor-not-allowed"
+                  : "bg-green-500 hover:bg-green-600"
+              }`}
+            >
+              Submit Review
+            </button>
+          </div>
+        </div>
+      </Modal>
+
       <div className="max-w-6xl mx-auto px-4">
         {/* Header section */}
         <div className="mb-8">
@@ -425,9 +682,20 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                             : "View Details"}
                         </button>
                         {order.orderStatus === "Completed" && (
-                          <button className="text-sm font-medium text-[#452E19]/70 hover:text-[#452E19] transition-colors">
-                            Buy Again
-                          </button>
+                          <div className="flex items-center space-x-4">
+                            <button
+                              onClick={() => handleRefundClick(order.id)}
+                              className="text-sm font-medium text-[#452E19]/70 hover:text-[#452E19] transition-colors"
+                            >
+                              Request Refund
+                            </button>
+                            <button
+                              onClick={() => handleReviewClick(order.id)}
+                              className="text-sm font-medium text-[#452E19]/70 hover:text-[#452E19] transition-colors"
+                            >
+                              Write Review
+                            </button>
+                          </div>
                         )}
                       </div>
                     </div>

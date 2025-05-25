@@ -32,6 +32,7 @@ const Page = () => {
     layers,
     type,
     additionalNotes,
+    dedication,
     color,
     generatedImage,
   } = useCustomizationStore();
@@ -114,13 +115,11 @@ const Page = () => {
 
   const calculatePrice = () => {
     // Simple pricing logic - adjust as needed
-    let basePrice = 300;
-    if (size === "12x18") basePrice += 200;
-    if (size === "18x24") basePrice += 400;
-    if (layers.includes("Two")) basePrice += 250;
-    if (layers.includes("Three")) basePrice += 500;
-    if (layers.includes("Multi")) basePrice += 750;
-    if (type === "Fondant") basePrice += 300;
+    let basePrice = 1;
+    if (size === "12x18") basePrice += 2;
+    if (size === "18x24") basePrice += 4;
+    if (layers.includes("Two")) basePrice += 2;
+    if (layers.includes("Three")) basePrice += 5;
     return basePrice;
   };
 
@@ -197,6 +196,14 @@ const Page = () => {
                   className="min-h-[100px]"
                 />
               </div>
+              <div className="mt-4">
+                <Label>Dedication</Label>
+                <Textarea
+                  value={dedication || "None"}
+                  readOnly
+                  className="min-h-[100px]"
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -253,17 +260,6 @@ const Page = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-                <div>
-                  <Label htmlFor="deliveryAddress">Delivery Address</Label>
-                  <Textarea
-                    id="deliveryAddress"
-                    name="deliveryAddress"
-                    value={customerInfo.deliveryAddress}
-                    onChange={handleInputChange}
-                    placeholder="123 Main St, City, State ZIP"
-                    className="min-h-[100px]"
-                  />
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -277,42 +273,36 @@ const Page = () => {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Base Cake</span>
-                  <span>₱300.00</span>
+                  <span>₱3.00</span>
                 </div>
                 {size === "12x18" && (
                   <div className="flex justify-between">
                     <span>Size Upgrade (Half Sheet)</span>
-                    <span>₱200.00</span>
+                    <span>₱2.00</span>
                   </div>
                 )}
                 {size === "18x24" && (
                   <div className="flex justify-between">
                     <span>Size Upgrade (Full Sheet)</span>
-                    <span>₱400.00</span>
+                    <span>₱4.00</span>
                   </div>
                 )}
                 {layers.includes("Two") && (
                   <div className="flex justify-between">
                     <span>Two-Tier Upgrade</span>
-                    <span>₱250.00</span>
+                    <span>₱2.00</span>
                   </div>
                 )}
                 {layers.includes("Three") && (
                   <div className="flex justify-between">
                     <span>Three-Tier Upgrade</span>
-                    <span>₱500.00</span>
-                  </div>
-                )}
-                {layers.includes("Multi") && (
-                  <div className="flex justify-between">
-                    <span>Multi-Tier Upgrade</span>
-                    <span>₱750.00</span>
+                    <span>₱5.00</span>
                   </div>
                 )}
                 {type === "Fondant" && (
                   <div className="flex justify-between">
                     <span>Fondant Icing</span>
-                    <span>₱300.00</span>
+                    <span>₱3.00</span>
                   </div>
                 )}
                 <div className="border-t border-gray-200 my-2"></div>

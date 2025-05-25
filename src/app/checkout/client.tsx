@@ -25,12 +25,17 @@ const Client = ({ user }: { user: Users | null }) => {
   const [paymentOption, setPaymentOption] = React.useState("Gcash");
   const [showPolicyModal, setShowPolicyModal] = React.useState(false);
   const [showQRModal, setShowQRModal] = React.useState(false);
+  const [showHowToModal, setShowHowToModal] = React.useState(false);
   const [acceptedPolicy, setAcceptedPolicy] = React.useState(false);
   const [proofOfPayment, setProofOfPayment] = React.useState("");
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+
+  React.useEffect(() => {
+    setShowHowToModal(true);
+  }, []);
 
   const handlePayment = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -74,7 +79,7 @@ const Client = ({ user }: { user: Users | null }) => {
       if (res.success) {
         toast.success("Order created successfully!");
         removeAll();
-		router.push(`/success`)
+        router.push(`/success`);
       } else {
         toast.error(res.error || "An error occurred. Please try again later.");
       }
@@ -95,6 +100,144 @@ const Client = ({ user }: { user: Users | null }) => {
 
   return (
     <>
+      {/* How To Modal - Add this at the beginning of your return statement */}
+      <Modal
+        className="max-w-2xl"
+        isOpen={showHowToModal}
+        onClose={() => setShowHowToModal(false)}
+      >
+        <div>
+          <h2 className="text-2xl font-bold mb-4">
+            How To Place & Pay For Your Order
+          </h2>
+          <div className="space-y-4 mb-6 max-h-[60vh] overflow-y-auto">
+            {/* Payment Steps Section */}
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+              <h3 className="font-semibold text-lg mb-3 text-blue-800">
+                How to Pay via QR Code (GCash or Maya)
+              </h3>
+              <ol className="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+                <li>Open your GCash or Maya app.</li>
+                <li>
+                  Tap <span className="font-semibold">"Scan QR"</span> or{" "}
+                  <span className="font-semibold">"Upload QR"</span> if you
+                  saved the code from the website.
+                </li>
+                <li>Scan or upload the owner's QR code shown at checkout.</li>
+                <li>
+                  Enter the{" "}
+                  <span className="font-semibold">exact order amount</span>.
+                </li>
+                <li>
+                  In the notes/message, write your{" "}
+                  <span className="font-semibold">Order ID or Name</span>.
+                </li>
+                <li>
+                  Tap <span className="font-semibold">"Pay"</span> to confirm.
+                </li>
+                <li>Take a screenshot of your payment confirmation.</li>
+                <li>Send/upload the screenshot as proof of payment.</li>
+              </ol>
+              <div className="mt-3 p-3 bg-blue-100 rounded text-sm text-blue-800">
+                <span className="font-semibold">📌 Important:</span> All orders
+                are for pickup only. Payment must be completed within 24 hours.
+              </div>
+            </div>
+
+            {/* Security Reminders Section */}
+            <div className="bg-red-50 p-4 rounded-lg border border-red-100">
+              <h3 className="font-semibold text-lg mb-3 text-red-800 flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-1"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Security Reminders (For Your Protection)
+              </h3>
+              <ul className="list-disc pl-5 space-y-2 text-sm text-gray-700">
+                <li>
+                  Only use the{" "}
+                  <span className="font-semibold">official QR code</span>{" "}
+                  provided by Marian Homebakes.
+                </li>
+                <li>
+                  Verify the{" "}
+                  <span className="font-semibold">merchant name</span> before
+                  sending payment.
+                </li>
+                <li>
+                  <span className="font-semibold">Never share your OTP</span>{" "}
+                  (One-Time Password) with anyone — even if they claim to be
+                  from GCash, Maya, or Marian Homebakes.
+                </li>
+                <li>
+                  Do not share your{" "}
+                  <span className="font-semibold">login credentials</span> or
+                  personal details.
+                </li>
+                <li>
+                  Keep a copy of your{" "}
+                  <span className="font-semibold">payment confirmation</span>.
+                </li>
+                <li>
+                  Payments must be completed{" "}
+                  <span className="font-semibold">within 24 hours</span> to
+                  confirm your order.
+                </li>
+                <li>
+                  <span className="font-semibold">
+                    All orders are for pickup only
+                  </span>{" "}
+                  — we don't offer delivery services.
+                </li>
+              </ul>
+            </div>
+
+            {/* Order Process Section */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold text-lg mb-2">
+                Order Confirmation Process
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                <div className="bg-white p-3 rounded border text-center">
+                  <div className="bg-green-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-green-800 font-bold">1</span>
+                  </div>
+                  <p className="text-sm">
+                    Complete payment with screenshot proof
+                  </p>
+                </div>
+                <div className="bg-white p-3 rounded border text-center">
+                  <div className="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-blue-800 font-bold">2</span>
+                  </div>
+                  <p className="text-sm">
+                    Wait for payment verification (within 1-2 hours)
+                  </p>
+                </div>
+                <div className="bg-white p-3 rounded border text-center">
+                  <div className="bg-purple-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <span className="text-purple-800 font-bold">3</span>
+                  </div>
+                  <p className="text-sm">Receive order confirmation via SMS</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button onClick={() => setShowHowToModal(false)}>
+              I Understand, Let's Continue
+            </Button>
+          </div>
+        </div>
+      </Modal>
       {/* Policy Modal */}
       <Modal
         className="max-w-lg"
@@ -203,7 +346,7 @@ const Client = ({ user }: { user: Users | null }) => {
 
       {/* QR Code Modal */}
       <Modal isOpen={showQRModal} onClose={() => setShowQRModal(false)}>
-        <div className="max-w-lg text-center">
+        <div className="max-w-lg h-[80vh] overflow-y-auto text-center">
           <h2 className="text-xl font-bold mb-4">
             {paymentOption} Payment Details
           </h2>
@@ -369,9 +512,6 @@ const Client = ({ user }: { user: Users | null }) => {
                   </p>
                 </div>
               </div>
-              <p className="font-semibold">
-                ₱{(item.price * item.quantity).toFixed(2)}
-              </p>
             </div>
           ))}
           <div className="flex justify-between items-center mt-8">

@@ -28,9 +28,22 @@ const sizes = [
 ];
 
 const shapes = ["Round", "Rectangle"];
-const flavors = ["Chocolate", "Mocha", "Caramel", "Vanilla", "Strawberry"];
-const icingTypes = ["Icing", "Fondant"];
-const layersOption = ["Single-Tier", "Two-Tier", "Three-Tier", "Multi-Tier"];
+const flavors = [
+  "Chocolate",
+  "Mocha",
+  "Caramel",
+  "Vanilla",
+  "Strawberry",
+  "Ube",
+  "Pandan",
+  "Red Velvet",
+  "Lemon",
+  "Matcha",
+  "Coffee",
+  "Mango",
+];
+const icingTypes = ["Icing"];
+const layersOption = ["Single-Tier", "Two-Tier", "Three-Tier"];
 
 const flavorColors = {
   Chocolate: "#7B3F00",
@@ -38,6 +51,13 @@ const flavorColors = {
   Caramel: "#D2691E",
   Vanilla: "#F3E5AB",
   Strawberry: "#FF69B4",
+  Ube: "#6A0DAD",
+  Pandan: "#A8D5BA",
+  "Red Velvet": "#8B0000",
+  Lemon: "#FFFACD",
+  Matcha: "#A8B400",
+  Coffee: "#4B3621",
+  Mango: "#FFB300",
 };
 
 const Customization = () => {
@@ -51,6 +71,7 @@ const Customization = () => {
     layers,
     type,
     additionalNotes,
+    dedication,
     color,
     generatedImage,
     setSize,
@@ -59,7 +80,8 @@ const Customization = () => {
     setType,
     setColor,
     setAdditionalNotes,
-    setGeneratedImage
+    setGeneratedImage,
+    setDedication,
   } = useCustomizationStore();
 
   const generateCake = async () => {
@@ -137,7 +159,7 @@ const Customization = () => {
 
       {/* Right Side: Customization Form */}
       <div className="h-[34.5rem] w-full col-span-full lg:col-span-1 flex flex-col bg-white">
-        <ScrollArea className="relative flex-1 overflow-auto">
+        <ScrollArea className="relative flex-1 overflow-y-auto">
           <div
             aria-hidden="true"
             className="absolute z-10 inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white pointer-events-none"
@@ -215,7 +237,7 @@ const Customization = () => {
             <RadioGroup value={color} onChange={setColor}>
               <div className="mt-5 space-y-4">
                 <Label>Flavor: {color}</Label>
-                <div className="flex items-center space-x-2">
+                <div className="grid lg:grid-cols-6 grid-cols-1 gap-4">
                   {flavors.map((flavor) => (
                     <Radio
                       key={flavor}
@@ -247,7 +269,7 @@ const Customization = () => {
             {/* Icing/Fondant Selection */}
             <div className="mt-4 space-y-1">
               <Label>Type: {type}</Label>
-              <Select defaultValue={type} onValueChange={setType}>
+              <Select disabled defaultValue={type} onValueChange={setType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
@@ -263,11 +285,20 @@ const Customization = () => {
 
             {/* Additional notes */}
             <div className="mt-4 space-y-1">
-              <Label>Additional notes:</Label>
+              <Label>Additional notes: (For AI)</Label>
               <Textarea
                 value={additionalNotes}
                 onChange={(e) => setAdditionalNotes(e.target.value)}
+                className="h-24"
                 placeholder='Add any additional notes here. (e.g. "Allergies, dietary restrictions, gender, characters etc.")'
+              />
+            </div>
+            <div className="mt-4 space-y-1">
+              <Label>Dedication: (optional)</Label>
+              <Textarea
+                value={dedication}
+                onChange={(e) => setDedication?.(e.target.value)}
+                placeholder='Add any dedication here. (e.g. "Happy Birthday, John!")'
               />
             </div>
           </div>
