@@ -55,9 +55,16 @@ const ProductDetails = ({
         <p className="font-semibold text-xl mt-2">
           ₱ {product?.price.toFixed(2)}
         </p>
-        <p className="mt-2 text-lg">Flavor: Classic vanilla chiffon with whipped cream frosting</p>
-        <p className="mt-2 text-lg">Sizes Available: 6-inch round (standard) – serves 6–8</p>
-        <p className="mt-2 text-lg">Allergens: Contain eggs, dairy, gluten</p>
+        <p className="mt-2 text-lg">
+          Flavor: {product?.flavors.join(", ") || "Not specified"}
+        </p>
+        <p className="mt-2 text-lg">
+          Sizes Available:
+          {product?.sizes.join(", ") || " Not specified"}
+        </p>
+        <p className="mt-2 text-lg">
+          Allergens: {product?.allergens.join(", ") || " Not specified"}
+        </p>
         <p className="mt-2 text-lg">{product?.description}</p>
         <div className="flex bg-[#0F2A1D] text-white px-5 h-10 w-60 mt-5 rounded-md justify-center items-center">
           <button onClick={handleDecrement}>
@@ -74,7 +81,11 @@ const ProductDetails = ({
             <Plus />
           </button>
         </div>
-        <Button size="lg" onClick={handleAddToCart} className="mt-5 flex items-center justify-center w-60">
+        <Button
+          size="lg"
+          onClick={handleAddToCart}
+          className="mt-5 flex items-center justify-center w-60"
+        >
           Add to cart
         </Button>
         <Button
