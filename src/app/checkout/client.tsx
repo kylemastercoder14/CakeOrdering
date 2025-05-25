@@ -91,7 +91,7 @@ const Client = ({ user }: { user: Users | null }) => {
 
   const getQRCodeImage = () => {
     if (paymentOption === "Gcash") {
-      return "/gcash.jpg"; // Replace with your actual Gcash QR image path
+      return "/gcash.png"; // Replace with your actual Gcash QR image path
     } else if (paymentOption === "Maya") {
       return "/maya.jpg"; // Replace with your actual Maya QR image path
     }
