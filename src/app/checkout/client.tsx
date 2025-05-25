@@ -110,130 +110,80 @@ const Client = ({ user }: { user: Users | null }) => {
           <h2 className="text-2xl font-bold mb-4">
             How To Place & Pay For Your Order
           </h2>
+
+          {/* Payment Methods */}
           <div className="space-y-4 mb-6 max-h-[60vh] overflow-y-auto">
-            {/* Payment Steps Section */}
+            {/* GCash Account Number */}
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
               <h3 className="font-semibold text-lg mb-3 text-blue-800">
-                How to Pay via QR Code (GCash or Maya)
+                GCash (Account Number)
               </h3>
               <ol className="list-decimal pl-5 space-y-2 text-sm text-gray-700">
-                <li>Open your GCash or Maya app.</li>
                 <li>
-                  Tap <span className="font-semibold">"Scan QR"</span> or{" "}
-                  <span className="font-semibold">"Upload QR"</span> if you
-                  saved the code from the website.
+                  Open GCash and tap{" "}
+                  <span className="font-semibold">
+                    "Send via Account Number"
+                  </span>
+                  .
                 </li>
-                <li>Scan or upload the owner's QR code shown at checkout.</li>
+                <li>Enter the store's GCash number (provided at checkout).</li>
                 <li>
-                  Enter the{" "}
-                  <span className="font-semibold">exact order amount</span>.
-                </li>
-                <li>
-                  In the notes/message, write your{" "}
-                  <span className="font-semibold">Order ID or Name</span>.
+                  Input the <span className="font-semibold">exact amount</span>.
                 </li>
                 <li>
-                  Tap <span className="font-semibold">"Pay"</span> to confirm.
+                  Add your <span className="font-semibold">Order ID/Name</span>{" "}
+                  in notes.
                 </li>
-                <li>Take a screenshot of your payment confirmation.</li>
-                <li>Send/upload the screenshot as proof of payment.</li>
+                <li>Confirm and screenshot the transaction.</li>
               </ol>
-              <div className="mt-3 p-3 bg-blue-100 rounded text-sm text-blue-800">
-                <span className="font-semibold">📌 Important:</span> All orders
-                are for pickup only. Payment must be completed within 24 hours.
-              </div>
             </div>
 
-            {/* Security Reminders Section */}
+            {/* PayMaya QR */}
+            <div className="bg-green-50 p-4 rounded-lg border border-green-100">
+              <h3 className="font-semibold text-lg mb-3 text-green-800">
+                PayMaya/Maya (QR Code)
+              </h3>
+              <ol className="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+                <li>
+                  Tap <span className="font-semibold">"Scan QR"</span> in Maya
+                  app.
+                </li>
+                <li>
+                  Scan the{" "}
+                  <span className="font-semibold">official QR code</span> from
+                  checkout.
+                </li>
+                <li>
+                  Enter the <span className="font-semibold">exact amount</span>.
+                </li>
+                <li>
+                  Add your <span className="font-semibold">Order ID/Name</span>.
+                </li>
+                <li>Screenshot and submit proof.</li>
+              </ol>
+            </div>
+
+            {/* Security Section (Keep your existing security reminders UI) */}
             <div className="bg-red-50 p-4 rounded-lg border border-red-100">
-              <h3 className="font-semibold text-lg mb-3 text-red-800 flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-1"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Security Reminders (For Your Protection)
+              <h3 className="font-semibold text-lg mb-3 text-red-800">
+                Security Reminders
               </h3>
               <ul className="list-disc pl-5 space-y-2 text-sm text-gray-700">
                 <li>
-                  Only use the{" "}
-                  <span className="font-semibold">official QR code</span>{" "}
-                  provided by Marian Homebakes.
+                  <span className="font-semibold">Never share</span> OTPs or
+                  passwords.
                 </li>
                 <li>
-                  Verify the{" "}
-                  <span className="font-semibold">merchant name</span> before
-                  sending payment.
-                </li>
-                <li>
-                  <span className="font-semibold">Never share your OTP</span>{" "}
-                  (One-Time Password) with anyone — even if they claim to be
-                  from GCash, Maya, or Marian Homebakes.
-                </li>
-                <li>
-                  Do not share your{" "}
-                  <span className="font-semibold">login credentials</span> or
-                  personal details.
-                </li>
-                <li>
-                  Keep a copy of your{" "}
-                  <span className="font-semibold">payment confirmation</span>.
-                </li>
-                <li>
-                  Payments must be completed{" "}
-                  <span className="font-semibold">within 24 hours</span> to
-                  confirm your order.
-                </li>
-                <li>
-                  <span className="font-semibold">
-                    All orders are for pickup only
-                  </span>{" "}
-                  — we don't offer delivery services.
+                  Verify merchant name:{" "}
+                  <span className="font-semibold">"MARIAN HOMEBKES"</span>.
                 </li>
               </ul>
             </div>
-
-            {/* Order Process Section */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-lg mb-2">
-                Order Confirmation Process
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-                <div className="bg-white p-3 rounded border text-center">
-                  <div className="bg-green-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-green-800 font-bold">1</span>
-                  </div>
-                  <p className="text-sm">
-                    Complete payment with screenshot proof
-                  </p>
-                </div>
-                <div className="bg-white p-3 rounded border text-center">
-                  <div className="bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-blue-800 font-bold">2</span>
-                  </div>
-                  <p className="text-sm">
-                    Wait for payment verification (within 1-2 hours)
-                  </p>
-                </div>
-                <div className="bg-white p-3 rounded border text-center">
-                  <div className="bg-purple-100 w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-purple-800 font-bold">3</span>
-                  </div>
-                  <p className="text-sm">Receive order confirmation via SMS</p>
-                </div>
-              </div>
-            </div>
           </div>
+
           <div className="flex justify-end">
             <Button onClick={() => setShowHowToModal(false)}>
-              I Understand, Let's Continue
+              I Understand
             </Button>
           </div>
         </div>
