@@ -34,6 +34,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const Page = () => {
 
       if (order.orderStatus === "Refunded") {
         acc[date].refund += order.totalAmount;
-      } else if (order.deliveryStatus === "Completed") {
+      } else if (order.orderStatus === "Completed") {
         acc[date].profit += order.totalAmount;
       }
 
