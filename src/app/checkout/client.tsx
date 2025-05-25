@@ -411,9 +411,6 @@ const Client = ({ user }: { user: Users | null }) => {
                     />
                   </div>
                   <span className="font-semibold">GCash</span>
-                  <span className="bg-green-100 absolute top-2 right-2 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full ml-2">
-                    Recommended
-                  </span>
                 </div>
                 <p className="text-sm mt-2">
                   Pay via GCash. Send payment to our GCash number or scan the QR
@@ -445,6 +442,9 @@ const Client = ({ user }: { user: Users | null }) => {
                     />
                   </div>
                   <span className="font-semibold">Maya</span>
+                  <span className="bg-green-100 absolute top-2 right-2 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full ml-2">
+                    Recommended
+                  </span>
                 </div>
                 <p className="text-sm mt-2">
                   Pay via Maya. Send payment to our Maya number or scan the QR
