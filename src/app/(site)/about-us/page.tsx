@@ -9,9 +9,9 @@ const Page = () => {
   return (
     <div className="min-h-screen w-full mt-20 overflow-x-hidden bg-white">
       {/* Hero Section */}
-      <div className="relative w-full min-h-screen bg-white">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="relative w-full min-h-[calc(100vh-5rem)] md:min-h-screen bg-white">
+        <div className="absolute inset-0 flex items-center justify-center pt-10 md:pt-0 pb-20 md:pb-0">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-20">
             <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
               <div className="relative w-full lg:w-1/2 aspect-square max-w-[600px]">
                 <Image
@@ -22,10 +22,10 @@ const Page = () => {
                 />
               </div>
               <div className="bg-[#D0F2B7] lg:-ml-20 lg:-mt-20 z-10 border border-black p-6 rounded-md w-full lg:w-1/2 max-w-[600px]">
-                <h3 className="text-center font-bold text-4xl mb-6">
+                <h3 className="text-center font-bold text-3xl sm:text-4xl mb-6">
                   About us
                 </h3>
-                <p className="text-center">
+                <p className="text-center text-sm sm:text-base">
                   Marian's Home bakes Shop, we craft custom cakes that make
                   every celebration unforgettable. From birthdays to weddings,
                   we transform your ideas into delicious, one-of-a-kind
@@ -44,17 +44,17 @@ const Page = () => {
       </div>
 
       {/* Core Values Section */}
-      <div className="relative w-full min-h-screen bg-white">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="relative w-full min-h-[calc(100vh-5rem)] md:min-h-screen bg-white">
+        <div className="absolute inset-0 flex items-center justify-center pt-10 md:pt-0 pb-20 md:pb-0">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-20">
             <div className="max-w-4xl mx-auto">
-              <h3 className="text-center font-bold text-4xl mb-10">
+              <h3 className="text-center font-bold text-3xl sm:text-4xl mb-10">
                 Core of Marian's Homebakeshop
               </h3>
               <div className="flex flex-col bg-[#D0F2B7]/70 py-7 px-6 sm:px-10 rounded-xl backdrop-blur-sm">
                 <div className="mb-6">
-                  <p className="font-semibold text-2xl">Mission:</p>
-                  <p className="mt-2 ml-4 sm:ml-10">
+                  <p className="font-semibold text-xl sm:text-2xl">Mission:</p>
+                  <p className="mt-2 ml-4 sm:ml-10 text-sm sm:text-base">
                     To craft exceptional, personalized cakes that combine
                     artistry, flavor, and premium ingredients. We aim to make
                     every celebration sweeter by delivering high-quality,
@@ -64,8 +64,8 @@ const Page = () => {
                 </div>
 
                 <div className="mb-6">
-                  <p className="font-semibold text-2xl">Vision:</p>
-                  <p className="mt-2 ml-4 sm:ml-10">
+                  <p className="font-semibold text-xl sm:text-2xl">Vision:</p>
+                  <p className="mt-2 ml-4 sm:ml-10 text-sm sm:text-base">
                     To be the go-to custom cake shop that transforms life's
                     special moments into unforgettable, edible masterpieces,
                     inspiring joy and connection through every creation.
@@ -73,8 +73,8 @@ const Page = () => {
                 </div>
 
                 <div>
-                  <p className="font-semibold text-2xl">Core Values:</p>
-                  <div className="mt-2 ml-4 sm:ml-10 space-y-4">
+                  <p className="font-semibold text-xl sm:text-2xl">Core Values:</p>
+                  <div className="mt-2 ml-4 sm:ml-10 space-y-4 text-sm sm:text-base">
                     <p>
                       <b>Creativity</b> - We bring your vision to life with
                       artistic and innovative designs.
@@ -104,14 +104,14 @@ const Page = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="relative w-full mb-20 min-h-screen bg-white">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <h3 className="text-center font-bold text-4xl mb-10">
+      <div className="relative w-full min-h-[calc(100vh-5rem)] md:min-h-screen bg-white">
+        <div className="absolute inset-0 flex items-center justify-center pt-10 md:pt-0 pb-20 md:pb-0">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-20">
+            <h3 className="text-center font-bold text-3xl sm:text-4xl mb-10">
               Customers Feedback
             </h3>
             <div className="max-w-7xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-0">
                 {[
                   {
                     id: 1,
@@ -148,7 +148,7 @@ const Page = () => {
                     key={testimonial.id}
                     className="flex flex-col items-center"
                   >
-                    <Avatar className="size-20">
+                    <Avatar className="size-16 sm:size-20">
                       <AvatarImage
                         src={testimonial.image}
                         className="object-cover"
@@ -156,16 +156,16 @@ const Page = () => {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div className="bg-[#452E1973] mt-5 rounded-lg p-4 w-full min-h-[200px] flex flex-col">
-                      <p className="line-clamp-4 flex-grow">
+                      <p className="line-clamp-4 flex-grow text-sm sm:text-base">
                         {testimonial.text}
                       </p>
                       <div className="flex mt-3 items-center justify-center gap-2">
                         {[...Array(5)].map((_, i) => (
                           <div
                             key={i}
-                            className="bg-[#C9F199] size-5 rounded-md flex items-center justify-center"
+                            className="bg-[#C9F199] size-4 sm:size-5 rounded-md flex items-center justify-center"
                           >
-                            <StarIcon className="size-3" fill="#47301B" />
+                            <StarIcon className="size-2 sm:size-3" fill="#47301B" />
                           </div>
                         ))}
                       </div>
