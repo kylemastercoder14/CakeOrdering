@@ -10,7 +10,7 @@ const Page = () => {
     <div className="h-screen bg-white">
       <div className="relative h-[38vh] bg-[#E3EED4] w-full">
         <div className="absolute inset-0">
-          <h3 className="text-center pt-40 uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-6xl mb-5">
+          <h3 className="text-center lg:pt-40 pt-20 uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-6xl mb-5">
             Contact Us
           </h3>
           <div className="flex justify-center items-center gap-3 text-[#689071] font-semibold text-2xl">
