@@ -109,7 +109,7 @@ const Navigation = () => {
         {isMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 w-full bg-[#0F2A1D] shadow-lg p-5">
             <ul className="flex flex-col gap-4">
-              {["/", "/about", "/products", "/blogs", "/contact-us"].map(
+              {["/", "/about-us", "/products", "/blogs", "/contact-us"].map(
                 (route, index) => (
                   <li key={index}>
                     <Link

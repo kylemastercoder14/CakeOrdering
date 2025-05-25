@@ -70,8 +70,8 @@ const Page = () => {
     },
   ];
   return (
-    <div className="w-full bg-[#D0F2B7] mt-6">
-      <h1 className="font-serif text-3xl font-bold">Our Customized Cakes</h1>
+    <div className="w-full bg-[#D0F2B7] p-5 mt-6">
+      <h1 className="text-3xl font-bold">Our Customized Cakes</h1>
       <p>
         Browse our varied collections of customized cakes by clicking on the
         categories below:
