@@ -92,7 +92,7 @@ const Page = () => {
                       key={item.id}
                     >
                       <TableCell className="flex items-center gap-2 sm:table-cell">
-                        <div className="relative size-20">
+                        <div className="relative lg:block hidden size-20">
                           <Image
                             src={item.image}
                             className="w-full h-full"

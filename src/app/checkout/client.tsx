@@ -100,7 +100,7 @@ const Client = ({ user }: { user: Users | null }) => {
 
   return (
     <>
-      {/* How To Modal - Add this at the beginning of your return statement */}
+      {/* How To Modal */}
       <Modal
         className="max-w-2xl"
         isOpen={showHowToModal}
@@ -110,10 +110,7 @@ const Client = ({ user }: { user: Users | null }) => {
           <h2 className="text-2xl font-bold mb-4">
             How To Place & Pay For Your Order
           </h2>
-
-          {/* Payment Methods */}
           <div className="space-y-4 mb-6 max-h-[60vh] overflow-y-auto">
-            {/* GCash Account Number */}
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
               <h3 className="font-semibold text-lg mb-3 text-blue-800">
                 GCash (Account Number)
@@ -138,7 +135,6 @@ const Client = ({ user }: { user: Users | null }) => {
               </ol>
             </div>
 
-            {/* PayMaya QR */}
             <div className="bg-green-50 p-4 rounded-lg border border-green-100">
               <h3 className="font-semibold text-lg mb-3 text-green-800">
                 PayMaya/Maya (QR Code)
@@ -163,7 +159,6 @@ const Client = ({ user }: { user: Users | null }) => {
               </ol>
             </div>
 
-            {/* Security Section (Keep your existing security reminders UI) */}
             <div className="bg-red-50 p-4 rounded-lg border border-red-100">
               <h3 className="font-semibold text-lg mb-3 text-red-800">
                 Security Reminders
@@ -188,6 +183,7 @@ const Client = ({ user }: { user: Users | null }) => {
           </div>
         </div>
       </Modal>
+
       {/* Policy Modal */}
       <Modal
         className="max-w-lg"
@@ -203,18 +199,10 @@ const Client = ({ user }: { user: Users | null }) => {
                 <li>
                   Customers must first establish an internal agreement with
                   Marian Homebakes regarding the pickup schedule and details.
-                  This agreement must be confirmed by Marian Homebakes prior to
-                  checkout and payment.
                 </li>
                 <li>
                   All orders are pickup only. Marian Homebakes does not offer
-                  delivery services under any circumstances.
-                </li>
-                <li>
-                  Customers may assign an authorized representative to collect
-                  the order on their behalf. This must be cleared and agreed
-                  upon with Marian Homebakes during the internal arrangement
-                  process.
+                  delivery services.
                 </li>
               </ul>
             </div>
@@ -223,21 +211,10 @@ const Client = ({ user }: { user: Users | null }) => {
               <h3 className="font-semibold mb-2">2. Pickup Procedure</h3>
               <ul className="list-disc pl-5 space-y-2 text-sm">
                 <li>
-                  Customers (or their authorized representatives) must collect
-                  their order on the agreed date and time from the designated
-                  Marian Homebakes location.
+                  Customers must collect their order on the agreed date and
+                  time.
                 </li>
-                <li>
-                  Delayed pickups beyond the scheduled time may compromise
-                  product quality (e.g., melting frosting), and Marian Homebakes
-                  will not be held responsible for such occurrences.
-                </li>
-                <li>
-                  Upon pickup, the customer or representative is required to
-                  inspect the order. Once the cake is accepted and the person
-                  leaves the premises, it is deemed that the item has been
-                  received in good condition.
-                </li>
+                <li>Delayed pickups may compromise product quality.</li>
               </ul>
             </div>
 
@@ -245,20 +222,8 @@ const Client = ({ user }: { user: Users | null }) => {
               <h3 className="font-semibold mb-2">3. Limitation of Liability</h3>
               <ul className="list-disc pl-5 space-y-2 text-sm">
                 <li>
-                  Marian Homebakes is not liable for any damage or deterioration
-                  once the product has been released. This includes damage
-                  caused by:
-                  <ul className="list-disc pl-5 mt-2 space-y-1">
-                    <li>Mishandling during transport</li>
-                    <li>Road or traffic conditions</li>
-                    <li>Vehicle issues</li>
-                    <li>Natural events</li>
-                    <li>Improper storage during transit</li>
-                  </ul>
-                </li>
-                <li>
-                  Marian Homebakes is also not responsible for orders that are
-                  not picked up within the agreed timeframe.
+                  Marian Homebakes is not liable for any damage after product
+                  release.
                 </li>
               </ul>
             </div>
@@ -272,7 +237,7 @@ const Client = ({ user }: { user: Users | null }) => {
               className="mr-2"
             />
             <label htmlFor="acceptPolicy" className="text-sm">
-              I have read, understood, and agree to Marian Homebakes' policies
+              I agree to Marian Homebakes' policies
             </label>
           </div>
           <div className="flex justify-end gap-2">
@@ -310,27 +275,26 @@ const Client = ({ user }: { user: Users | null }) => {
             />
           </div>
           <p className="mb-4">
-            Please scan the QR code above to complete your payment. Once payment
-            is confirmed, we will process your order.
+            Please scan the QR code above to complete your payment.
           </p>
-          <Button
-            onClick={() => {
-              setShowQRModal(false);
-            }}
-          >
-            Done
-          </Button>
+          <Button onClick={() => setShowQRModal(false)}>Done</Button>
         </div>
       </Modal>
 
-      <div className="h-screen flex items-center">
+      <div className="min-h-screen flex flex-col lg:flex-row">
+        {/* Payment Form Section */}
         <form
-          className="w-[60%] flex flex-col pr-10 pt-10 pl-96 border-r h-screen bg-white"
+          className="w-full lg:w-[60%] flex flex-col p-6 lg:pr-10 lg:pt-10 lg:pl-24 border-r bg-white"
           onSubmit={handlePayment}
         >
-          <Image src="/assets/logo.png" alt="Logo" width={80} height={80} />
-          <h1 className="font-bold text-2xl mt-3 mb-5">Payment Form</h1>
-          <div className="grid lg:grid-cols-2 gap-4">
+          <div className="flex justify-center lg:justify-start">
+            <Image src="/assets/logo.png" alt="Logo" width={80} height={80} />
+          </div>
+          <h1 className="font-bold text-xl lg:text-2xl mt-3 mb-5 text-center lg:text-left">
+            Payment Form
+          </h1>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Input
               placeholder="Name"
               value={name}
@@ -344,15 +308,16 @@ const Client = ({ user }: { user: Users | null }) => {
               required
             />
           </div>
+
+          <h3 className="mt-4 mb-2">Payment Option</h3>
           <RadioGroup value={paymentOption} onChangeAction={setPaymentOption}>
-            <h3 className="mt-4 mb-2">Payment Option</h3>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col md:flex-row items-center gap-4">
               <OptionRadio
-                className="p-5 w-full relative flex flex-col"
+                className="p-4 w-full relative flex flex-col"
                 value="Gcash"
               >
                 <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10">
+                  <div className="relative w-8 h-8 lg:w-10 lg:h-10">
                     <Image
                       src="/gcash-logo.jpeg"
                       alt="GCash Logo"
@@ -362,14 +327,14 @@ const Client = ({ user }: { user: Users | null }) => {
                   </div>
                   <span className="font-semibold">GCash</span>
                 </div>
-                <p className="text-sm mt-2">
+                <p className="text-xs lg:text-sm mt-2">
                   Pay via GCash. Send payment to our GCash number or scan the QR
                   code.
                 </p>
                 <Button
                   type="button"
                   size="sm"
-                  className="w-fit"
+                  className="w-fit mt-2"
                   onClick={() => {
                     setPaymentOption("Gcash");
                     setShowQRModal(true);
@@ -378,12 +343,13 @@ const Client = ({ user }: { user: Users | null }) => {
                   View QR Code
                 </Button>
               </OptionRadio>
+
               <OptionRadio
-                className="p-5 w-full relative flex flex-col"
+                className="p-4 w-full relative flex flex-col"
                 value="Maya"
               >
                 <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10">
+                  <div className="relative w-8 h-8 lg:w-10 lg:h-10">
                     <Image
                       src="/maya-logo.png"
                       alt="Maya Logo"
@@ -396,14 +362,14 @@ const Client = ({ user }: { user: Users | null }) => {
                     Recommended
                   </span>
                 </div>
-                <p className="text-sm mt-2">
+                <p className="text-xs lg:text-sm mt-2">
                   Pay via Maya. Send payment to our Maya number or scan the QR
                   code.
                 </p>
                 <Button
                   type="button"
                   size="sm"
-                  className="w-fit"
+                  className="w-fit mt-2"
                   onClick={() => {
                     setPaymentOption("Maya");
                     setShowQRModal(true);
@@ -414,59 +380,78 @@ const Client = ({ user }: { user: Users | null }) => {
               </OptionRadio>
             </div>
           </RadioGroup>
+
           <Textarea
             className="mt-4 mb-4"
             placeholder="Message to the Admin (e.g. Allergies, with candles, etc.)"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
+
           <ImageUpload
             defaultValue={proofOfPayment}
             onImageUpload={(setImage) => setProofOfPayment(setImage)}
-            description="Upload proof of payment (required for Gcash and Maya payments)"
+            description="Upload proof of payment (required)"
           />
-          <div className="flex items-center justify-end mt-10 gap-3">
+
+          <div className="flex flex-col-reverse sm:flex-row items-center justify-end mt-6 gap-3">
             <Button
               type="button"
               onClick={() => router.push("/cart")}
               variant="ghost"
+              className="w-full sm:w-auto"
             >
-              <ChevronLeft />
+              <ChevronLeft size={16} />
               Return to cart
             </Button>
-            <Button type="submit">Proceed to payment</Button>
+            <Button type="submit" className="w-full sm:w-auto">
+              Proceed to payment
+            </Button>
           </div>
         </form>
-        <div className="w-[40%] bg-zinc-200 h-screen flex flex-col pl-10 pt-10 pr-14">
-          {items.map((item) => (
-            <div
-              className="flex items-center justify-between mb-6"
-              key={item.id}
-            >
-              <div className="flex items-center gap-2">
-                <div className="relative w-20 h-20">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    className="w-full h-full rounded-md border object-cover"
-                  />
+
+        {/* Order Summary Section */}
+        <div className="w-full lg:w-[40%] bg-zinc-200 p-6 lg:pl-10 lg:pt-10 lg:pr-14">
+          <h2 className="text-xl font-bold mb-6">Order Summary</h2>
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+            {items.map((item) => (
+              <div
+                className="flex items-center justify-between gap-4"
+                key={item.id}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="relative w-16 h-16 lg:w-20 lg:h-20">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="w-full h-full rounded-md border object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm lg:text-base">
+                      {item.name}
+                    </p>
+                    <p className="text-xs lg:text-sm line-clamp-2">
+                      {item.description}
+                    </p>
+                    <p className="text-xs lg:text-sm text-[#251201] font-semibold">
+                      Quantity: {item.quantity} pc(s)
+                    </p>
+                  </div>
                 </div>
-                <div className="w-[500px]">
-                  <p className="font-semibold">{item.name}</p>
-                  <p className="line-clamp-2 w-[300px] text-sm">
-                    {item.description}
-                  </p>
-                  <p className="text-sm text-[#251201] font-semibold">
-                    Quantity: {item.quantity} pc(s)
-                  </p>
-                </div>
+                <p className="font-semibold text-sm lg:text-base">
+                  ₱{(item.price * item.quantity).toFixed(2)}
+                </p>
               </div>
+            ))}
+          </div>
+
+          <div className="mt-8 border-t border-gray-300 pt-4">
+            <div className="flex justify-between items-center">
+              <p className="font-bold">Total Price:</p>
+              <p className="font-semibold text-lg">₱{totalPrice.toFixed(2)}</p>
             </div>
-          ))}
-          <div className="flex justify-between items-center mt-8">
-            <p className="font-bold">Total Price:</p>
-            <p className="font-semibold">₱{totalPrice.toFixed(2)}</p>
           </div>
         </div>
       </div>
