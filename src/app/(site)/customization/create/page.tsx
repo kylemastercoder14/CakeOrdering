@@ -118,7 +118,7 @@ const Customization = () => {
       // Store data in localStorage
       const finalData = {
         ...customizationData,
-        generatedImage: res?.data.url, // Use the fresh image URL
+        generatedImage: res?.data.url,
       };
       localStorage.setItem("customizationData", JSON.stringify(finalData));
       setIsGenerated(true);
