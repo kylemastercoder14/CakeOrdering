@@ -56,6 +56,7 @@ const SignupForm = ({
   const [privacyModal, setPrivacyModal] = React.useState(false);
   const [termsModal, setTermsModal] = React.useState(false);
   const router = useRouter();
+  const passwordToastShown = React.useRef(false);
 
   const form = useForm<z.infer<typeof RegistrationValidation>>({
     resolver: zodResolver(RegistrationValidation),
@@ -81,6 +82,27 @@ const SignupForm = ({
     { label: "One number", valid: /[0-9]/.test(password) },
     { label: "One special character", valid: /[^A-Za-z0-9]/.test(password) },
   ];
+
+  const showPasswordRequirementsToast = () => {
+    if (!passwordToastShown.current) {
+      toast.info(
+        <div className="space-y-2">
+          <p className="font-bold">Password Requirements:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            {passwordRequirements.map((req, idx) => (
+              <li key={idx}>{req.label}</li>
+            ))}
+          </ul>
+        </div>,
+        {
+          duration: 20000,
+          id: "password-requirements",
+          position: "bottom-right"
+        }
+      );
+      passwordToastShown.current = true;
+    }
+  };
 
   const onSubmit = async (values: z.infer<typeof RegistrationValidation>) => {
     if (!isLoaded) return;
@@ -161,18 +183,19 @@ const SignupForm = ({
       </Modal>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-5">
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel className="text-white">First Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
                       placeholder="Enter your first name"
+                      className="text-white border-white placeholder:text-white"
                       {...field}
                     />
                   </FormControl>
@@ -185,11 +208,12 @@ const SignupForm = ({
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name</FormLabel>
+                  <FormLabel className="text-white">Last Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
                       placeholder="Enter your last name"
+                      className="text-white border-white placeholder:text-white"
                       {...field}
                     />
                   </FormControl>
@@ -203,12 +227,33 @@ const SignupForm = ({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email Address</FormLabel>
+                <FormLabel className="text-white">Email Address</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
                     disabled={isSubmitting}
                     placeholder="Enter your email address"
+                    className="text-white border-white placeholder:text-white"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-white">
+                  Active Phone Number
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isSubmitting}
+                    placeholder="Enter your active phone number"
+                    className="text-white border-white placeholder:text-white"
                     {...field}
                   />
                 </FormControl>
@@ -219,52 +264,18 @@ const SignupForm = ({
           <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
             <FormField
               control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Complete Address</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="Enter your complete address"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Active Phone Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isSubmitting}
-                      placeholder="Enter your active phone number"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
-            <FormField
-              control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-white">Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       disabled={isSubmitting}
                       placeholder="Enter your password"
+                      className="text-white border-white placeholder:text-white"
                       {...field}
+                      onFocus={showPasswordRequirementsToast}
                     />
                   </FormControl>
                   <FormMessage />
@@ -276,12 +287,13 @@ const SignupForm = ({
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel className="text-white">Confirm Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       disabled={isSubmitting}
                       placeholder="Confirm your password"
+                      className="text-white border-white placeholder:text-white"
                       {...field}
                     />
                   </FormControl>
@@ -289,18 +301,6 @@ const SignupForm = ({
                 </FormItem>
               )}
             />
-          </div>
-          <div className="mt-2 space-y-1">
-            {passwordRequirements.map((req, idx) => (
-              <p
-                key={idx}
-                className={`text-sm ${
-                  req.valid ? "text-green-600" : "text-red-500"
-                }`}
-              >
-                • {req.label}
-              </p>
-            ))}
           </div>
 
           {/* Terms Acceptance Checkbox */}
@@ -315,13 +315,13 @@ const SignupForm = ({
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <div className="space-y-1 leading-none">
+                <div className="space-y-1 text-white leading-none">
                   <FormLabel>
                     I agree to the{" "}
                     <Button
                       type="button"
                       variant="link"
-                      className="p-0 h-auto underline"
+                      className="p-0 text-white h-auto underline"
                       onClick={() => setTermsModal(true)}
                     >
                       Terms & Conditions
@@ -330,7 +330,7 @@ const SignupForm = ({
                     <Button
                       type="button"
                       variant="link"
-                      className="p-0 h-auto underline"
+                      className="p-0 text-white h-auto underline"
                       onClick={() => setPrivacyModal(true)}
                     >
                       Privacy Policy
@@ -345,9 +345,9 @@ const SignupForm = ({
           <Button className="w-full" disabled={isSubmitting} type="submit">
             Sign Up
           </Button>
-          <div className="flex gap-1 justify-center items-center">
+          <div className="flex gap-1 text-white justify-center items-center">
             <p>Already have an account?</p>
-            <Link href="/sign-in" className="underline">
+            <Link href="/sign-in" className="hover:underline text-white">
               Sign in
             </Link>
           </div>

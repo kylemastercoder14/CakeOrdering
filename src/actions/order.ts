@@ -1,41 +1,54 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use server";
 
 import db from "@/lib/db";
-import { useUser } from "@/hooks/use-user";
+import { OrderReceiptEmailHTML } from "@/components/email-template/automated-receipt";
+import nodemailer from "nodemailer";
 
 export const createOrder = async ({
   userId,
   name,
-  address,
   orderNumber,
   totalAmount,
   message,
-  shippingOption,
-  shippingFee,
+  paymentOption,
+  proofOfPayment,
   items,
 }: {
   userId: string;
   name: string;
-  address: string;
   orderNumber: string;
   totalAmount: number;
   message?: string;
-  shippingOption: string;
-  shippingFee: number;
-  items: { id: string; quantity: number; price: number }[];
+  paymentOption: string;
+  proofOfPayment: string;
+  items: {
+    id: string;
+    quantity: number;
+    price: number;
+    name: string;
+    image: string;
+  }[];
 }) => {
   try {
+    const user = await db.users.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+
     const order = await db.orders.create({
       data: {
         userId,
         name,
-        address,
         orderNumber,
         totalAmount,
         message,
-        shippingOption,
-        shippingFee,
+        paymentOption,
+        proofOfPayment,
         orderItems: {
           create: items.map((item) => ({
             productId: item.id,
@@ -46,10 +59,78 @@ export const createOrder = async ({
       },
     });
 
+    const email = user.email || "";
+
+    await sendReceiptEmail(
+      orderNumber,
+      name,
+      email,
+      totalAmount,
+      message,
+      paymentOption,
+      proofOfPayment,
+      items.map((item) => ({
+        ...item,
+      }))
+    );
+
     return { success: true, orderId: order.id };
   } catch (error) {
     console.error("Error creating order:", error);
     return { success: false, error: "Something went wrong. Please try again" };
+  }
+};
+
+export const sendReceiptEmail = async (
+  orderNumber: string,
+  name: string,
+  email: string,
+  totalAmount: number,
+  message: string | undefined,
+  paymentOption: string,
+  proofOfPayment: string,
+  items: {
+    id: string;
+    quantity: number;
+    price: number;
+    name?: string;
+    image?: string;
+  }[]
+) => {
+  const htmlContent = await OrderReceiptEmailHTML({
+    orderNumber,
+    name,
+    totalAmount,
+    message,
+    paymentOption,
+    proofOfPayment,
+    items,
+  });
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "kylemastercoder14@gmail.com",
+      pass: "dakolbdppgtdmikl",
+    },
+  });
+
+  const messageData = {
+    from: "marianshomemadebake@gmail.com",
+    to: email,
+    subject: `Marian's Homemade Bake - Order #${orderNumber} Confirmation`,
+    text: `Dear ${name},\n\nThank you for your order (#${orderNumber}) at Marian's Homemade Bake! Your order is being processed and we'll notify you once it's ready.\n\nTotal Amount: ₱${totalAmount.toFixed(
+      2
+    )}\nPayment Method: ${paymentOption}\n\nWe appreciate your business!\n\n- Marian's Homemade Bake Team`,
+    html: htmlContent,
+  };
+
+  try {
+    await transporter.sendMail(messageData);
+    return { success: "Email has been sent." };
+  } catch (error) {
+    console.error("Error sending notification", error);
+    return { message: "An error occurred. Please try again." };
   }
 };
 
@@ -112,45 +193,6 @@ export const approveOrder = async (orderId: string) => {
   }
 };
 
-export const pickUpOrder = async (orderId: string) => {
-  try {
-    await db.orders.update({
-      where: {
-        id: orderId,
-      },
-      data: {
-        deliveryStatus: "For Pickup",
-      },
-    });
-
-    return { success: "Order updated for pickup successfully" };
-  } catch (error) {
-    console.error(error);
-    return { error: "Failed to update for pickup" };
-  }
-};
-
-export const deliverOrder = async (orderId: string) => {
-  const { staff } = await useUser();
-  try {
-    const staffName = staff?.firstName + " " + staff?.lastName;
-    await db.orders.update({
-      where: {
-        id: orderId,
-      },
-      data: {
-        deliveryStatus: "Out for Delivery",
-        riderName: staffName,
-      },
-    });
-
-    return { success: "Order delivered successfully" };
-  } catch (error) {
-    console.error(error);
-    return { error: "Failed to deliver order" };
-  }
-};
-
 export const getOrderById = async (orderId: string) => {
   try {
     const order = await db.orders.findUnique({
@@ -203,8 +245,6 @@ export const cancelOrder = async (orderId: string, reason: string) => {
       },
       data: {
         orderStatus: "Cancelled",
-        deliveryStatus: "Cancelled",
-        paymentStatus: "Cancelled",
         cancellationReason: reason,
       },
     });
@@ -213,5 +253,23 @@ export const cancelOrder = async (orderId: string, reason: string) => {
   } catch (error) {
     console.error(error);
     return { error: "Failed to cancel order" };
+  }
+};
+
+export const completeOrder = async (orderId: string) => {
+  try {
+    await db.orders.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        orderStatus: "Completed",
+      },
+    });
+
+    return { success: "Order marked as completed" };
+  } catch (error) {
+    console.error("Error completing order:", error);
+    return { error: "Failed to complete order" };
   }
 };

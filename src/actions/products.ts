@@ -10,6 +10,9 @@ export const createProduct = async (values: {
   price: number;
   status: string;
   category: string;
+  flavors: string[];
+  allergens: string[];
+  sizes: string[];
   isFeatured?: boolean;
 }) => {
   try {
@@ -21,6 +24,9 @@ export const createProduct = async (values: {
         price: values.price,
         status: values.status,
         categoryId: values.category,
+        flavors: values.flavors,
+        allergens: values.allergens,
+        sizes: values.sizes,
         isFeatured: values.isFeatured,
       },
     });
@@ -57,6 +63,9 @@ export const updateProduct = async (
     price: number;
     status: string;
     category: string;
+    flavors: string[];
+    allergens: string[];
+    sizes: string[];
     isFeatured?: boolean;
   },
   id: string
@@ -71,6 +80,9 @@ export const updateProduct = async (
         price: values.price,
         status: values.status,
         categoryId: values.category,
+        flavors: values.flavors,
+        allergens: values.allergens,
+        sizes: values.sizes,
         isFeatured: values.isFeatured,
       },
     });

@@ -28,15 +28,13 @@ type Order = {
   orderNumber: string;
   createdAt: string;
   totalAmount: number;
-  shippingFee: number;
-  shippingOption: string;
   orderStatus: "Completed" | "Pending" | "Cancelled" | string;
-  deliveryStatus: "Delivered" | "Waiting For Rider" | "On the Way" | string;
-  paymentStatus: "Paid" | "Pending" | "Failed" | string;
+  paymentOption: string;
+  proofOfPayment?: string;
   name: string;
-  address: string;
-  riderName?: string;
   message?: string;
+  cancellationReason?: string;
+  cancelledAt?: string;
   orderItems: OrderItem[];
 };
 
@@ -50,7 +48,7 @@ type OrderItemProps = {
 
 type StatusBadgeProps = {
   status: string;
-  type: "order" | "delivery" | "payment";
+  type: "order" | "payment";
 };
 
 // Status badges with appropriate colors
@@ -71,20 +69,6 @@ const StatusBadge = ({ status, type }: StatusBadgeProps) => {
     } else {
       bgColor = "bg-blue-100";
       textColor = "text-blue-800";
-    }
-  } else if (type === "delivery") {
-    if (status === "Delivered") {
-      bgColor = "bg-green-100";
-      textColor = "text-green-800";
-    } else if (status === "Waiting For Rider") {
-      bgColor = "bg-yellow-100";
-      textColor = "text-yellow-800";
-    } else if (status === "On the Way") {
-      bgColor = "bg-blue-100";
-      textColor = "text-blue-800";
-    } else {
-      bgColor = "bg-gray-100";
-      textColor = "text-gray-800";
     }
   } else if (type === "payment") {
     if (status === "Paid") {
@@ -172,6 +156,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
     setCancellingOrderId(orderId);
     setCancellationReason("");
     setOtherReason("");
+    setCancelModal(true);
   };
 
   // Handle cancellation submission
@@ -205,16 +190,16 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
 
   // Filter options
   const [filter, setFilter] = useState<
-    "all" | "completed" | "pending" | "cancelled" | "refunded"
+    "all" | "Completed" | "Pending" | "Cancelled" | "Refunded"
   >("all");
 
   // Filtered orders based on selected filter
   const filteredOrders = orders.filter((order) => {
     if (filter === "all") return true;
-    if (filter === "completed") return order.orderStatus === "Completed";
-    if (filter === "pending") return order.orderStatus === "Pending";
-    if (filter === "cancelled") return order.orderStatus === "Cancelled";
-    if (filter === "refunded") return order.orderStatus === "Refunded";
+    if (filter === "Completed") return order.orderStatus === "Completed";
+    if (filter === "Pending") return order.orderStatus === "Pending";
+    if (filter === "Cancelled") return order.orderStatus === "Cancelled";
+    if (filter === "Refunded") return order.orderStatus === "Refunded";
     return true;
   });
 
@@ -244,7 +229,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                   value={reason}
                   checked={cancellationReason === reason}
                   onChange={() => setCancellationReason(reason)}
-                  className="h-4 w-4 text-[#8BC34A] focus:ring-[#8BC34A]"
+                  className="h-4 w-4 text-[#0F2A1D] focus:ring-[#0F2A1D]"
                 />
                 <label
                   htmlFor={`reason-${reason}`}
@@ -308,47 +293,47 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
             onClick={() => setFilter("all")}
             className={`px-4 py-2 text-sm rounded-full transition-colors ${
               filter === "all"
-                ? "bg-[#8BC34A] text-white"
+                ? "bg-[#0F2A1D] text-white"
                 : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
             }`}
           >
             All Orders
           </button>
           <button
-            onClick={() => setFilter("pending")}
+            onClick={() => setFilter("Pending")}
             className={`px-4 py-2 text-sm rounded-full transition-colors ${
-              filter === "pending"
-                ? "bg-[#8BC34A] text-white"
+              filter === "Pending"
+                ? "bg-[#0F2A1D] text-white"
                 : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
             }`}
           >
             Pending
           </button>
           <button
-            onClick={() => setFilter("completed")}
+            onClick={() => setFilter("Completed")}
             className={`px-4 py-2 text-sm rounded-full transition-colors ${
-              filter === "completed"
-                ? "bg-[#8BC34A] text-white"
+              filter === "Completed"
+                ? "bg-[#0F2A1D] text-white"
                 : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
             }`}
           >
             Completed
           </button>
           <button
-            onClick={() => setFilter("cancelled")}
+            onClick={() => setFilter("Cancelled")}
             className={`px-4 py-2 text-sm rounded-full transition-colors ${
-              filter === "cancelled"
-                ? "bg-[#8BC34A] text-white"
+              filter === "Cancelled"
+                ? "bg-[#0F2A1D] text-white"
                 : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
             }`}
           >
             Cancelled
           </button>
           <button
-            onClick={() => setFilter("refunded")}
+            onClick={() => setFilter("Refunded")}
             className={`px-4 py-2 text-sm rounded-full transition-colors ${
-              filter === "refunded"
-                ? "bg-[#8BC34A] text-white"
+              filter === "Refunded"
+                ? "bg-[#0F2A1D] text-white"
                 : "bg-gray-100 text-[#452E19] hover:bg-gray-200"
             }`}
           >
@@ -361,8 +346,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
           <div className="space-y-6">
             {filteredOrders.map((order) => {
               const canCancel =
-                (order.orderStatus === "Pending" ||
-                  order.deliveryStatus === "Waiting For Rider") &&
+                order.orderStatus === "Pending" &&
                 isWithin24Hours(order.createdAt);
               return (
                 <div
@@ -470,18 +454,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                                   Subtotal
                                 </span>
                                 <span className="text-[#452E19]">
-                                  ₱
-                                  {(
-                                    order.totalAmount - order.shippingFee
-                                  ).toFixed(2)}
-                                </span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-[#452E19]/70">
-                                  Shipping ({order.shippingOption})
-                                </span>
-                                <span className="text-[#452E19]">
-                                  ₱{order.shippingFee.toFixed(2)}
+                                  ₱{order.totalAmount.toFixed(2)}
                                 </span>
                               </div>
                               <div className="flex justify-between text-base font-semibold pt-2 border-t">
@@ -494,10 +467,10 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                           </div>
                         </div>
 
-                        {/* Right column: Delivery info */}
+                        {/* Right column: Order info */}
                         <div>
                           <h3 className="font-semibold text-[#452E19] mb-3">
-                            Delivery Information
+                            Order Information
                           </h3>
                           <div className="bg-white rounded-lg shadow-sm p-4 space-y-4">
                             {/* Status information */}
@@ -513,53 +486,41 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-sm text-[#452E19]/70">
-                                  Delivery Status
+                                  Payment Method
                                 </span>
-                                <StatusBadge
-                                  status={order.deliveryStatus}
-                                  type="delivery"
-                                />
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-sm text-[#452E19]/70">
-                                  Payment Status
+                                <span className="text-sm text-[#452E19]">
+                                  {order.paymentOption}
                                 </span>
-                                <StatusBadge
-                                  status={order.paymentStatus}
-                                  type="payment"
-                                />
                               </div>
+                              {order.proofOfPayment && (
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-[#452E19]/70">
+                                    Proof of Payment
+                                  </span>
+                                  <a
+                                    href={order.proofOfPayment}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-blue-500 hover:underline"
+                                  >
+                                    View Proof
+                                  </a>
+                                </div>
+                              )}
                             </div>
 
                             {/* Separator */}
                             <hr className="border-gray-100" />
 
-                            {/* Shipping details */}
+                            {/* Customer details */}
                             <div className="space-y-2">
                               <h4 className="text-sm font-medium text-[#452E19]">
-                                Shipping Address
+                                Customer Name
                               </h4>
                               <p className="text-sm text-[#452E19]/70">
                                 {order.name}
-                                <br />
-                                {order.address}
                               </p>
                             </div>
-
-                            {/* Rider info if available */}
-                            {order.riderName && (
-                              <>
-                                <hr className="border-gray-100" />
-                                <div className="space-y-2">
-                                  <h4 className="text-sm font-medium text-[#452E19]">
-                                    Delivery Rider
-                                  </h4>
-                                  <p className="text-sm text-[#452E19]/70">
-                                    {order.riderName}
-                                  </p>
-                                </div>
-                              </>
-                            )}
 
                             {/* Customer message if available */}
                             {order.message && (
@@ -575,18 +536,29 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                                 </div>
                               </>
                             )}
+
+                            {/* Cancellation reason if available */}
+                            {order.cancellationReason && (
+                              <>
+                                <hr className="border-gray-100" />
+                                <div className="space-y-2">
+                                  <h4 className="text-sm font-medium text-[#452E19]">
+                                    Cancellation Reason
+                                  </h4>
+                                  <p className="text-sm text-[#452E19]/70">
+                                    {order.cancellationReason}
+                                  </p>
+                                </div>
+                              </>
+                            )}
                           </div>
 
                           {/* Action buttons */}
-                          {(order.orderStatus === "Pending" || order.paymentStatus === "Pending") && (
-                            order.deliveryStatus === "Waiting For Rider") && (
+                          {order.orderStatus === "Pending" && (
                             <div className="mt-4 flex justify-end">
                               <button
                                 disabled={!canCancel}
-                                onClick={() => {
-                                  handleCancelClick(order.id);
-                                  setCancelModal(true);
-                                }}
+                                onClick={() => handleCancelClick(order.id)}
                                 className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
                                   canCancel
                                     ? "bg-red-500 hover:bg-red-600"

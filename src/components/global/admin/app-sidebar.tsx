@@ -117,7 +117,7 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              className="hover:bg-[#47301B] hover:text-white"
+              className="hover:bg-[#0F2A1D] hover:text-white"
               size="lg"
               asChild
             >
@@ -150,7 +150,7 @@ export function AppSidebar({
               {riderData.navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    className="hover:bg-[#47301B] hover:text-white pointer-events-none font-semibold"
+                    className="hover:bg-[#0F2A1D] hover:text-white pointer-events-none font-semibold"
                     asChild
                   >
                     <a href={item.url} className="font-medium">
@@ -179,7 +179,7 @@ export function AppSidebar({
               {data.navMain.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    className="hover:bg-[#47301B] hover:text-white pointer-events-none font-semibold"
+                    className="hover:bg-[#0F2A1D] hover:text-white pointer-events-none font-semibold"
                     asChild
                   >
                     <a href={item.url} className="font-medium">

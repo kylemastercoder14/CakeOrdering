@@ -65,9 +65,6 @@ const ViewOrder = ({ id }: { id: string }) => {
           <strong>Name:</strong> {order.name}
         </p>
         <p>
-          <strong>Address:</strong> {order.address}
-        </p>
-        <p>
           <strong>Total Amount:</strong> ₱{order.totalAmount.toFixed(2)}
         </p>
         <p>
@@ -77,36 +74,21 @@ const ViewOrder = ({ id }: { id: string }) => {
               order.orderStatus === "Rejected"
                 ? "bg-red-600"
                 : order.orderStatus === "Pending"
-                ? "bg-yellow-600"
-                : "bg-green-600"
+                  ? "bg-yellow-600"
+                  : "bg-green-600"
             }`}
           >
             {order.orderStatus}
           </span>
         </p>
         <p>
-          <strong>Delivery Status:</strong>{" "}
-          <span
-            className={`px-1.5 py-0.5 text-sm rounded-md text-white ${
-              order.deliveryStatus === "Waiting For Rider"
-                ? "bg-yellow-600"
-                : order.deliveryStatus === "Out for Delivery"
-                ? "bg-blue-600"
-                : order.deliveryStatus === "Delivered"
-                ? "bg-green-600"
-                : order.deliveryStatus === "Order Failed"
-                ? "bg-red-600"
-                : "bg-gray-500"
-            }`}
-          >
-            {order.deliveryStatus}
-          </span>
+          <strong>Payment Option:</strong> {order.paymentOption}
         </p>
         <p>
-          <strong>Shipping Option:</strong> {order.shippingOption}
-        </p>
-        <p>
-          <strong>Shipping Fee:</strong> ₱{order.shippingFee.toFixed(2)}
+          <strong>Proof of payment:</strong>{" "}
+          <a href={order.proofOfPayment || ""} className='text-blue-600 hover:underline' target="_blank">
+            View
+          </a>
         </p>
         {order.message && (
           <p>

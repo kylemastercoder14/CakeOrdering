@@ -31,9 +31,7 @@ const Page = async () => {
       name: item.name,
       orderStatus: item.orderStatus,
       orderNumber: item.orderNumber,
-      deliveryStatus: item.deliveryStatus,
       totalAmount: `₱${item.totalAmount.toFixed(2)}`,
-      address: item.address || "",
     })) || [];
 
   const formattedDataRefund: RefundColumn[] =

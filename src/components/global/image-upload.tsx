@@ -11,9 +11,11 @@ import { Button } from "@/components/ui/button";
 const ImageUpload = ({
   onImageUpload,
   defaultValue = "",
+  description
 }: {
   onImageUpload: (url: string) => void;
   defaultValue?: string;
+  description?: string;
 }) => {
   const [imageUrl, setImageUrl] = useState<string>(defaultValue);
 
@@ -125,7 +127,9 @@ const ImageUpload = ({
         ) : (
           <>
             <Inbox className="w-10 h-10 text-green-500" />
-            <p className="mt-2 text-sm text-slate-400">Drop your image here.</p>
+            <p className="mt-2 text-sm text-slate-400">
+              {description || "Drag and drop an image here, or click to select one"}
+            </p>
           </>
         )}
       </div>

@@ -71,12 +71,13 @@ const SigninForm = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel className="text-white">Email Address</FormLabel>
               <FormControl>
                 <Input
                   type="email"
                   disabled={isSubmitting}
                   placeholder="Enter your email address"
+                  className="text-white border-white placeholder:text-white"
                   {...field}
                 />
               </FormControl>
@@ -90,10 +91,10 @@ const SigninForm = () => {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center justify-between">
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-white">Password</FormLabel>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-black hover:underline"
+                  className="text-sm text-white hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -103,6 +104,7 @@ const SigninForm = () => {
                   type="password"
                   disabled={isSubmitting}
                   placeholder="Enter your password"
+                  className="text-white border-white placeholder:text-white"
                   {...field}
                 />
               </FormControl>
@@ -110,16 +112,12 @@ const SigninForm = () => {
             </FormItem>
           )}
         />
-        <Button
-          className="w-full"
-          disabled={isSubmitting}
-          type="submit"
-        >
+        <Button className="w-60 mx-auto flex items-center justify-center" disabled={isSubmitting} type="submit">
           Sign In
         </Button>
         <div className="flex gap-1 justify-center items-center">
-          <p>Don&apos;t have an account?</p>
-          <Link href="/sign-up" className="underline">
+          <p className='text-white'>Don&apos;t have an account?</p>
+          <Link href="/sign-up" className="hover:underline text-white">
             Sign up
           </Link>
         </div>

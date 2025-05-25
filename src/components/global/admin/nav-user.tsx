@@ -20,7 +20,7 @@ import { Admin } from "@prisma/client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import AlertModal from "../alert-modal";
+import AlertModal from "@/components/global/alert-modal";
 import { logoutUser } from "@/actions/staff";
 
 export function NavUser({ staff }: { staff: Admin }) {

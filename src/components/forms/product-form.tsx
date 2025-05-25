@@ -33,6 +33,7 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/global/image-upload";
 import { toast } from "sonner";
 import { createProduct, updateProduct } from "@/actions/products";
+import { TagsInput } from "@/components/global/tags-input";
 
 const ProductForm = ({
   initialData,
@@ -57,6 +58,9 @@ const ProductForm = ({
       price: initialData?.price || 0,
       category: initialData?.categoryId || "",
       status: initialData?.status || "",
+      flavors: initialData?.flavors || [],
+      allergens: initialData?.allergens || [],
+      sizes: initialData?.sizes || [],
       isFeatured: initialData?.isFeatured || true,
     },
   });
@@ -218,6 +222,63 @@ const ProductForm = ({
             />
           </div>
           <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="flavors"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Flavors <span className="text-red-600">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <TagsInput
+                      placeholder="Enter product flavors"
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sizes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Sizes <span className="text-red-600">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <TagsInput
+                      placeholder="Enter product sizes"
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="allergens"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Allergens <span className="text-red-600">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <TagsInput
+                      placeholder="Enter product allergens"
+                      value={field.value}
+                      onValueChange={(value) => field.onChange(value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="imageUrl"

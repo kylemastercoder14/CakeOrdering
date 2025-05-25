@@ -37,13 +37,13 @@ const Header = () => {
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 px-4">
-      <SidebarTrigger className="-ml-1 hover:[#47301B]/80" />
-      <Separator orientation="vertical" className="mr-2 h-4 bg-[#47301B]" />
+      <SidebarTrigger className="-ml-1 hover:[#0F2A1D]/80" />
+      <Separator orientation="vertical" className="mr-2 h-4 bg-[#0F2A1D]" />
       <Breadcrumb>
         <BreadcrumbList>
           {pathname !== "/admin/dashboard" && (
             <>
-              <BreadcrumbItem className="hidden text-[#47301B]/70 md:block">
+              <BreadcrumbItem className="hidden text-[#0F2A1D]/70 md:block">
                 <BreadcrumbLink href="/admin/dashboard">Dashboard</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
@@ -57,7 +57,7 @@ const Header = () => {
                 {entityType}
               </BreadcrumbLink>
             ) : (
-              <BreadcrumbPage className="text-[#412a15] capitalize font-semibold">
+              <BreadcrumbPage className="text-[#0F2A1D] capitalize font-semibold">
                 {entityType}
               </BreadcrumbPage>
             )}
@@ -68,7 +68,7 @@ const Header = () => {
             <>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[#412a15] capitalize font-semibold">
+                <BreadcrumbPage className="text-[#0F2A1D] capitalize font-semibold">
                   Create {entityType}
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -80,7 +80,7 @@ const Header = () => {
             <>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[#412a15] capitalize font-semibold">
+                <BreadcrumbPage className="text-[#0F2A1D] capitalize font-semibold">
                   Edit {entityType}
                 </BreadcrumbPage>
               </BreadcrumbItem>

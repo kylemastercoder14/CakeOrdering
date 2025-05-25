@@ -119,12 +119,13 @@ const ForgotPasswordForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel className='text-white'>Email Address</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       disabled={isSubmitting}
                       placeholder="Enter your email address"
+                      className="text-white border-white placeholder:text-white"
                       {...field}
                     />
                   </FormControl>
@@ -140,12 +141,13 @@ const ForgotPasswordForm = () => {
                 name="code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Verification Code</FormLabel>
+                    <FormLabel className='text-white'>Verification Code</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
                         disabled={isSubmitting}
                         placeholder="Enter 6-digit code"
+                        className="text-white border-white placeholder:text-white"
                         {...field}
                       />
                     </FormControl>
@@ -155,7 +157,7 @@ const ForgotPasswordForm = () => {
               />
             </>
           )}
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" className="w-60 mx-auto flex items-center justify-center" disabled={isSubmitting}>
             {isSubmitting
               ? "Processing..."
               : showCodeInput
@@ -168,7 +170,7 @@ const ForgotPasswordForm = () => {
       {showCodeInput && (
         <Button
           variant="link"
-          className="w-full text-muted-foreground"
+          className="w-full text-white"
           onClick={() => {
             setShowCodeInput(false);
             form.reset({ email: email, code: "" });
@@ -178,9 +180,9 @@ const ForgotPasswordForm = () => {
         </Button>
       )}
 
-      <div className="text-center text-sm">
+      <div className="text-center text-white text-sm">
         Remember your password?{" "}
-        <Link href="/sign-in" className="underline">
+        <Link href="/sign-in" className="hover:underline text-white">
           Sign in
         </Link>
       </div>

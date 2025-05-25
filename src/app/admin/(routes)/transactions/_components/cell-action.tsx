@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Bike,
+  Box,
   CircleCheck,
   Ellipsis,
   Fullscreen,
@@ -21,7 +21,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import AlertModal from "@/components/global/alert-modal";
-import { approveOrder, deleteOrder, pickUpOrder, rejectOrder } from "@/actions/order";
+import { approveOrder, deleteOrder, rejectOrder, completeOrder } from "@/actions/order";
 import { Modal } from "@/components/ui/modal";
 import ViewOrder from "./view-order";
 
@@ -30,7 +30,7 @@ const CellAction = ({ id, status }: { id: string; status: string }) => {
   const [openModal, setOpenModal] = React.useState(false);
   const [openModalReject, setOpenModalReject] = React.useState(false);
   const [openModalApprove, setOpenModalApprove] = React.useState(false);
-  const [openModalPickup, setOpenModalPickup] = React.useState(false);
+  const [openCompletedModal, setCompletedModal] = React.useState(false);
   const [openModalView, setOpenModalView] = React.useState(false);
 
   const onDelete = async () => {
@@ -81,12 +81,12 @@ const CellAction = ({ id, status }: { id: string; status: string }) => {
     }
   };
 
-  const onPickup = async () => {
+  const onComplete = async () => {
     try {
-      const res = await pickUpOrder(id as string);
+      const res = await completeOrder(id as string);
       if (res.success) {
         toast.success(res.success);
-        setOpenModalPickup(false);
+        setCompletedModal(false);
         router.refresh();
       } else {
         toast.error(res.error);
@@ -117,10 +117,10 @@ const CellAction = ({ id, status }: { id: string; status: string }) => {
         description="This action cannot be undone. This will approve the order and notify the customer."
       />
       <AlertModal
-        isOpen={openModalPickup}
-        onClose={() => setOpenModalPickup(false)}
-        onConfirm={onPickup}
-        description="This action cannot be undone. This will notify the rider to pick up the order."
+        isOpen={openCompletedModal}
+        onClose={() => setCompletedModal(false)}
+        onConfirm={onComplete}
+        description="This action cannot be undone. This will notify the customer that the order is ready for pickup."
       />
       <Modal
         className="max-w-4xl"
@@ -149,9 +149,9 @@ const CellAction = ({ id, status }: { id: string; status: string }) => {
             </>
           )}
           {status === "Approved" && (
-            <DropdownMenuItem onClick={() => setOpenModalPickup(true)}>
-              <Bike className="size-4" />
-              Ready for Pickup
+            <DropdownMenuItem onClick={() => setCompletedModal(true)}>
+              <Box className="size-4" />
+              Complete Order
             </DropdownMenuItem>
           )}
           <DropdownMenuItem onClick={() => setOpenModalView(true)}>

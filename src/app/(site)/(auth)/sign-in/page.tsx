@@ -53,7 +53,7 @@ const Page = () => {
   };
 
   return (
-    <div className="flex p-5 flex-col items-center w-full bg-[#D0F2B7] h-screen overflow-y-auto justify-center">
+    <div className="flex p-5 flex-col items-center max-w-4xl mx-auto w-full h-screen overflow-y-auto justify-center">
       <div
         id="clerk-captcha"
         className="my-4 min-h-[78px] w-full max-w-md"
@@ -61,7 +61,7 @@ const Page = () => {
       <Button
         onClick={() => signInWith("oauth_google")}
         size="lg"
-        className="w-full"
+        className=""
         disabled={isLoading.google}
       >
         {isLoading.google ? (
@@ -71,17 +71,17 @@ const Page = () => {
             <Image
               src="/assets/google.svg"
               alt="Google"
-              className="lg:mr-10 mr-2"
-              width={25}
-              height={25}
+              className="lg:mr-5 mr-2"
+              width={20}
+              height={20}
             />
             Continue with Google
           </>
         )}
       </Button>
       <p className="mt-5 mb-5">OR</p>
-      <div className="bg-white shadow lg:w-1/2 w-full p-5 rounded-md">
-        <h2 className="text-xl font-semibold">Welcome back</h2>
+      <div className="bg-[#375534] shadow w-full p-5 rounded-lg">
+        <h2 className="text-xl text-white font-semibold">Welcome back</h2>
         <SigninForm />
       </div>
     </div>

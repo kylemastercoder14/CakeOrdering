@@ -12,9 +12,9 @@ const Page = async () => {
   });
 
   return (
-    <div className="flex flex-col p-5 items-center w-full bg-[#D0F2B7] overflow-y-auto h-screen justify-center">
-      <div className="bg-white shadow lg:w-1/2 w-full p-5 rounded-md lg:mt-10 mt-[460px]">
-        <h2 className="text-xl font-semibold">New Registration</h2>
+    <div className="flex flex-col p-5 items-center w-full overflow-y-auto h-screen justify-center">
+      <div className="bg-[#375534] shadow lg:w-1/2 w-full p-5 rounded-md lg:mt-10 mt-[480px]">
+        <h2 className="text-xl font-semibold text-white">New Registration</h2>
         <SignupForm termsOfService={termsOfService} privacyPolicy={privacyPolicy} />
       </div>
     </div>

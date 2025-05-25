@@ -40,14 +40,17 @@ model Categories {
 }
 
 model Products {
-  id           String  @id @default(cuid())
+  id           String   @id @default(cuid())
   name         String
   description  String
+  flavors      String[]
+  sizes        String[]
+  allergens    String[]
   price        Float
   imageUrl     String
-  isFeatured   Boolean @default(true)
-  status       String  @default("In stock")
-  isCustomized Boolean @default(false)
+  isFeatured   Boolean  @default(true)
+  status       String   @default("In stock")
+  isCustomized Boolean  @default(false)
 
   categoryId String
   category   Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -66,17 +69,13 @@ model Products {
 model Orders {
   id             String  @id @default(cuid())
   name           String
-  address        String
-  orderNumber    String
+  orderNumber    String  @unique
   totalAmount    Float
   orderStatus    String  @default("Pending")
-  deliveryStatus String  @default("Waiting For Rider")
-  paymentStatus  String  @default("Pending")
   message        String?
-  shippingOption String
-  shippingFee    Float
+  paymentOption  String
+  proofOfPayment String?
 
-  riderName          String?
   cancellationReason String?
   cancelledAt        DateTime?
 
