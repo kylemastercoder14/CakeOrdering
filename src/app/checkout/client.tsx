@@ -190,7 +190,7 @@ const Client = ({ user }: { user: Users | null }) => {
                 </li>
                 <li>
                   Verify merchant name:{" "}
-                  <span className="font-semibold">"MARIAN HOMEBKES"</span>.
+                  <span className="font-semibold">"MARIAN HOMEBAKES"</span>.
                 </li>
               </ul>
             </div>
