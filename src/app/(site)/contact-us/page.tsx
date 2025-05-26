@@ -8,16 +8,19 @@ import Footer from "@/components/global/site/footer";
 const Page = () => {
   return (
     <div className="h-screen bg-white">
-      <div className="relative h-[38vh] bg-[#E3EED4] w-full">
-        <div className="absolute inset-0">
-          <h3 className="text-center lg:pt-40 pt-20 uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-6xl mb-5">
+      <div className="relative h-[50vh] w-full">
+        <Image
+          src="/banner.png"
+          fill
+          className="w-full h-full object-cover"
+          alt="faq"
+          priority
+        />
+        <div className="absolute inset-0 flex items-center justify-center flex-col">
+          <h1 className="text-center uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-5xl md:text-6xl px-4 drop-shadow-md">
             Contact Us
-          </h3>
-          <div className="flex justify-center items-center gap-3 text-[#689071] font-semibold text-2xl">
-            <Link href="/">Home</Link>
-            <p>/</p>
-            <p>Contact Us</p>
-          </div>
+          </h1>
+          <div className="w-24 h-1 bg-[#8BC34A] mt-6 rounded-full"></div>
         </div>
       </div>
       <div className="grid pb-24 lg:grid-cols-5 lg:px-[200px] px-10 pt-10 grid-cols-1 gap-20">
