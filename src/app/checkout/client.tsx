@@ -295,7 +295,8 @@ const Client = ({ user }: { user: Users | null }) => {
             />
           </div>
           <p className="mb-4">
-            Please scan the QR code above to complete your payment.
+            Please scan the QR code or use the account number provided below to
+            complete your payment.
           </p>
           <Button onClick={() => setShowQRModal(false)}>Done</Button>
         </div>
