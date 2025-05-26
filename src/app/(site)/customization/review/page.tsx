@@ -37,6 +37,26 @@ const Page = () => {
     generatedImage,
   } = useCustomizationStore();
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value.replace(/\D/g, ""); // Remove all non-digit characters
+    let formattedInput = "";
+
+    if (input.length > 0) {
+      formattedInput = `+63 ${input.substring(0, 3)}`;
+      if (input.length > 3) {
+        formattedInput += ` ${input.substring(3, 6)}`;
+      }
+      if (input.length > 6) {
+        formattedInput += ` ${input.substring(6, 10)}`;
+      }
+    }
+
+    setCustomerInfo((prev) => ({
+      ...prev,
+      phone: formattedInput,
+    }));
+  };
+
   const handleSubmit = async () => {
     if (!customerInfo.name || !customerInfo.email || !customerInfo.phone) {
       toast.error("Please fill in all required customer information");
@@ -245,8 +265,9 @@ const Page = () => {
                     id="phone"
                     name="phone"
                     value={customerInfo.phone}
-                    onChange={handleInputChange}
-                    placeholder="+1 (555) 123-4567"
+                    onChange={handlePhoneChange}
+                    placeholder="+63 912 345 6789"
+                    maxLength={16}
                     required
                   />
                 </div>
