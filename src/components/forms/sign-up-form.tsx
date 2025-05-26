@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,6 +23,7 @@ import { createAccount } from "@/actions/user";
 import { Policies } from "@prisma/client";
 import { Modal } from "@/components/ui/modal";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Eye, EyeOff } from "lucide-react";
 
 // Define the base schema
 const RegistrationBaseSchema = z.object({
@@ -54,6 +55,8 @@ const SignupForm = ({
   const { signUp, isLoaded } = useSignUp();
   const [privacyModal, setPrivacyModal] = React.useState(false);
   const [termsModal, setTermsModal] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   const passwordToastShown = React.useRef(false);
 
@@ -267,16 +270,29 @@ const SignupForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white">Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      disabled={isSubmitting}
-                      placeholder="Enter your password"
-                      className="text-white border-white placeholder:text-white"
-                      {...field}
-                      onFocus={showPasswordRequirementsToast}
-                    />
-                  </FormControl>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        disabled={isSubmitting}
+                        placeholder="Enter your password"
+                        className="text-white border-white placeholder:text-white pr-10"
+                        {...field}
+                        onFocus={showPasswordRequirementsToast}
+                      />
+                    </FormControl>
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -287,15 +303,30 @@ const SignupForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white">Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      disabled={isSubmitting}
-                      placeholder="Confirm your password"
-                      className="text-white border-white placeholder:text-white"
-                      {...field}
-                    />
-                  </FormControl>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        disabled={isSubmitting}
+                        placeholder="Confirm your password"
+                        className="text-white border-white placeholder:text-white pr-10"
+                        {...field}
+                      />
+                    </FormControl>
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
