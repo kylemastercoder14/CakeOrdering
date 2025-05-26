@@ -27,15 +27,14 @@ const Faqs = async () => {
       {/* Hero Section */}
       <div className="relative h-[50vh] w-full">
         <Image
-          src="/assets/contact.jpg"
+          src="/banner.png"
           fill
           className="w-full h-full object-cover"
           alt="faq"
           priority
         />
-        <div className="absolute bg-[#D0F2B7]/50 inset-0 w-full h-full"></div>
         <div className="absolute inset-0 flex items-center justify-center flex-col">
-          <h1 className="text-center uppercase text-[#452E19] font-black font-mono tracking-wider text-5xl md:text-6xl px-4 drop-shadow-md">
+          <h1 className="text-center uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-5xl md:text-6xl px-4 drop-shadow-md">
             Frequently Asked Questions
           </h1>
           <div className="w-24 h-1 bg-[#8BC34A] mt-6 rounded-full"></div>
