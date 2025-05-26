@@ -2,7 +2,7 @@ import React from "react";
 import db from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 const ProductCatalog = async () => {
   const data = await db.categories.findMany({
@@ -18,10 +18,10 @@ const ProductCatalog = async () => {
       </h1>
       <div className="mt-3 flex items-center text-[#251201] justify-center gap-2">
         <Link
-          className="hover:underline font-semibold"
+          className={buttonVariants({ variant: "default" })}
           href="/products"
         >
-          View more &rarr;
+          View All Products
         </Link>
       </div>
       <div className="mt-10 grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-5">
