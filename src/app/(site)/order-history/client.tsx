@@ -294,7 +294,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
           <div className="space-y-3 mb-4">
             {[
               "I don't like it",
-              "Short of money",
+              "Duplicate order",
               "Found a better deal",
               "Changed my mind",
               "other",
