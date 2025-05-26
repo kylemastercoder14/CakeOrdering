@@ -9,7 +9,7 @@ const Hero = () => {
   return (
     <div className="relative w-full mt-20 h-[80vh] md:h-screen overflow-hidden">
       <Image
-        src="/bg.png"
+        src="/bg-2.png"
         alt="Delicious cake background"
         fill
         className="w-full h-full object-cover"

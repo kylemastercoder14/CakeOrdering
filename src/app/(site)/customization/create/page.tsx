@@ -123,10 +123,12 @@ const Customization = () => {
       localStorage.setItem("customizationData", JSON.stringify(finalData));
       setIsGenerated(true);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message);
+      if (axios.isAxiosError(error)) {
+        toast.error(
+          `API Error: ${error.response?.data?.message || error.message}`
+        );
       } else {
-        toast.error("An error occurred. Please try again later.");
+        toast.error("An unexpected error occurred");
       }
     } finally {
       setLoading(false);
