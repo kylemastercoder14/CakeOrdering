@@ -110,8 +110,8 @@ export const sendReceiptEmail = async (
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "kylemastercoder14@gmail.com",
-      pass: "dakolbdppgtdmikl",
+      user: "rpmarijuan@gmail.com",
+      pass: "mtuohtfimomlymso",
     },
   });
 

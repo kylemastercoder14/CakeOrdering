@@ -100,7 +100,7 @@ const Customization = () => {
       method: "POST",
       url: "https://ai-text-to-image-generator-api.p.rapidapi.com/realistic",
       headers: {
-        "x-rapidapi-key": "ab760ca41dmshf0fa6b061746929p1fa376jsnfb7e6e5f37ae",
+        "x-rapidapi-key": "715181a67emsh292afbe7b058796p174e39jsn49b435dd4ef3",
         "x-rapidapi-host": "ai-text-to-image-generator-api.p.rapidapi.com",
         "Content-Type": "application/json",
       },
