@@ -201,15 +201,6 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
     }
   };
 
-  // Handle refund request click
-  const handleRefundClick = (orderId: string) => {
-    setRefundingOrderId(orderId);
-    setRefundReason("");
-    setOtherRefundReason("");
-    setRefundDetails("");
-    setRefundModal(true);
-  };
-
   // Handle refund submission
   const submitRefund = async () => {
     if (!refundingOrderId) return;
@@ -370,16 +361,16 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
       <Modal isOpen={refundModal} onClose={() => setRefundModal(false)}>
         <div>
           <h3 className="text-lg font-bold text-[#452E19] mb-4">
-            Request Refund
+            Request Cancellation
           </h3>
           <p className="text-[#452E19]/80 mb-4">
-            Please provide details about your refund request:
+            Please provide details about your cancellation request:
           </p>
 
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-[#452E19] mb-2">
-                Reason for Refund
+                Reason for Cancellation
               </label>
               <div className="space-y-3">
                 {[
@@ -457,7 +448,7 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                   : "bg-blue-500 hover:bg-blue-600"
               }`}
             >
-              Submit Refund Request
+              Submit Cancellation Request
             </button>
           </div>
         </div>
@@ -683,12 +674,6 @@ const OrderHistoryPage = ({ orders = [] }: OrderHistoryPageProps) => {
                         </button>
                         {order.orderStatus === "Completed" && (
                           <div className="flex items-center space-x-4">
-                            <button
-                              onClick={() => handleRefundClick(order.id)}
-                              className="text-sm font-medium text-[#452E19]/70 hover:text-[#452E19] transition-colors"
-                            >
-                              Request Refund
-                            </button>
                             <button
                               onClick={() => handleReviewClick(order.id)}
                               className="text-sm font-medium text-[#452E19]/70 hover:text-[#452E19] transition-colors"
