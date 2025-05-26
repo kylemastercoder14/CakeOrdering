@@ -37,6 +37,26 @@ const Client = ({ user }: { user: Users | null }) => {
     setShowHowToModal(true);
   }, []);
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value.replace(/\D/g, ""); // Remove all non-digit characters
+    let formattedInput = "";
+
+    if (input.length > 0) {
+      formattedInput = `+63 ${input.substring(0, 3)}`;
+      if (input.length > 3) {
+        formattedInput += ` ${input.substring(3, 6)}`;
+      }
+      if (input.length > 6) {
+        formattedInput += ` ${input.substring(6, 10)}`;
+      }
+    }
+
+    setPhone(formattedInput);
+    if (input.length > 16) {
+      toast.error("Phone number cannot exceed 16 characters.");
+    }
+  };
+
   const handlePayment = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -303,8 +323,9 @@ const Client = ({ user }: { user: Users | null }) => {
             />
             <Input
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Recipient's Phone Number"
+              onChange={handlePhoneChange}
+              placeholder="+63 912 345 6789"
+              maxLength={16}
               required
             />
           </div>
