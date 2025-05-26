@@ -57,7 +57,7 @@ const Footer = () => {
             FAQs
           </Link>
           <Link className="hover:underline" href="/return-policy">
-            Return & Refund Policy
+            Refund and Cancellation Policy
           </Link>
           <Link className="hover:underline" href="/terms-condition">
             Terms & Condition

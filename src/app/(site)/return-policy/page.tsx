@@ -7,7 +7,7 @@ const Page = async () => {
   // Fetch refund policy content from database
   const policy = await db.policies.findFirst({
     where: {
-      title: "Refund Policy",
+      title: "Refund and Cancellation Policy",
     },
   });
 
@@ -24,7 +24,7 @@ const Page = async () => {
         />
         <div className="absolute inset-0 flex items-center justify-center flex-col">
           <h1 className="text-center uppercase text-[#0F2A1D] font-black font-mono tracking-wider text-5xl md:text-6xl px-4 drop-shadow-md">
-            Return & Refund Policy
+            Refund and Cancellation Policy
           </h1>
           <div className="w-24 h-1 bg-[#8BC34A] mt-6 rounded-full"></div>
         </div>
