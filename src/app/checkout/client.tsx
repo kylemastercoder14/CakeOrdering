@@ -420,7 +420,7 @@ const Client = ({ user }: { user: Users | null }) => {
                 key={item.id}
               >
                 <div className="flex items-center gap-3">
-                  <div className="relative w-16 h-16 lg:w-20 lg:h-20">
+                  <div className="relative lg:block hidden w-16 h-16 lg:w-20 lg:h-20">
                     <Image
                       src={item.image}
                       alt={item.name}
