@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,10 +21,12 @@ import Link from "next/link";
 import { useSignIn } from "@clerk/nextjs";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 const SigninForm = () => {
   const { signIn, isLoaded, setActive } = useSignIn();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof LoginValidation>>({
     resolver: zodResolver(LoginValidation),
     defaultValues: {
@@ -42,20 +44,14 @@ const SigninForm = () => {
         identifier: values.email,
         password: values.password,
       });
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
         toast.success("Sign in successful.");
         router.push("/");
       } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
         console.error(JSON.stringify(signInAttempt, null, 2));
       }
     } catch (err: unknown) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
   };
@@ -99,24 +95,41 @@ const SigninForm = () => {
                   Forgot password?
                 </Link>
               </div>
-              <FormControl>
-                <Input
-                  type="password"
-                  disabled={isSubmitting}
-                  placeholder="Enter your password"
-                  className="text-white border-white placeholder:text-white"
-                  {...field}
-                />
-              </FormControl>
+              <div className="relative">
+                <FormControl>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    disabled={isSubmitting}
+                    placeholder="Enter your password"
+                    className="text-white border-white placeholder:text-white pr-10"
+                    {...field}
+                  />
+                </FormControl>
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button className="w-60 mx-auto flex items-center justify-center" disabled={isSubmitting} type="submit">
+        <Button
+          className="w-60 mx-auto flex items-center justify-center"
+          disabled={isSubmitting}
+          type="submit"
+        >
           Sign In
         </Button>
         <div className="flex gap-1 justify-center items-center">
-          <p className='text-white'>Don&apos;t have an account?</p>
+          <p className="text-white">Don&apos;t have an account?</p>
           <Link href="/sign-up" className="hover:underline text-white">
             Sign up
           </Link>
