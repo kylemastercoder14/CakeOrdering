@@ -32,13 +32,19 @@ export async function POST(req: Request) {
 }
 
 async function handleChatMessage(message: string): Promise<ChatbotResponse> {
-  // First check for order number pattern before other handlers
-  const orderNumberMatch = message.match(
-    /MarianHomeBakeShop-\d{13}|(?:order|#)?\s*[A-Z0-9-]{6,20}/i
-  );
+  const orderNumberPattern =
+    /\b(MarianHomeBakeShop-\d{13}|(?:order|#)?\s*[A-Z0-9-]{6,20})\b/i;
+  const orderNumberMatch = message.match(orderNumberPattern);
+
+  // Order number has priority — short-circuit everything else
   if (orderNumberMatch) {
     const orderNumber = orderNumberMatch[0].trim();
-    return await getOrderStatus(orderNumber);
+    const orderResponse = await getOrderStatus(orderNumber);
+
+    // Only return this if the order is actually found
+    if (orderResponse.type !== "order_not_found") {
+      return orderResponse;
+    }
   }
 
   // Greetings
@@ -58,8 +64,7 @@ async function handleChatMessage(message: string): Promise<ChatbotResponse> {
       "details",
       "business",
       "shop",
-    ]) &&
-    !message.includes("MarianHomeBakeShop-")
+    ])
   ) {
     return {
       response: `**About Marian's Homebakeshop:**
@@ -215,7 +220,7 @@ async function handleChatMessage(message: string): Promise<ChatbotResponse> {
     };
   }
 
-  // Delivery questions
+  // Delivery
   if (containsAny(message, ["delivery", "pickup", "shipping", "how to get"])) {
     return {
       response: `**Delivery Options:**
@@ -228,7 +233,7 @@ async function handleChatMessage(message: string): Promise<ChatbotResponse> {
     };
   }
 
-  // Payment questions
+  // Payment
   if (
     containsAny(message, [
       "payment",
@@ -250,7 +255,7 @@ async function handleChatMessage(message: string): Promise<ChatbotResponse> {
     };
   }
 
-  // Default response
+  // Default fallback
   return {
     response:
       "I couldn't understand your question. For more assistance, you can:\n1. Visit our Facebook page: [Marian's Homebakeshop](https://facebook.com/marianshomebakeshop)\n2. Call us at (046) 123-4567\n3. Email orders@marianshomebakeshop.com",

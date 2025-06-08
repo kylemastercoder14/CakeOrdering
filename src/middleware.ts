@@ -16,6 +16,7 @@ const isPublicRoute = createRouteMatcher([
   "/return-policy",
   "/terms-condition",
   "/contact-us",
+  "/api/dashboard(.*)",
 ]);
 
 export default clerkMiddleware(

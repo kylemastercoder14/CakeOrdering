@@ -38,11 +38,32 @@ const Client = ({ user }: { user: Users | null }) => {
   }, []);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value.replace(/\D/g, ""); // Remove all non-digit characters
-    let formattedInput = "";
+    let input = e.target.value.replace(/\D/g, ""); // Remove all non-digit characters
 
+    // Step 1: Normalize to remove any existing country code
+    if (input.startsWith("63")) {
+      input = input.substring(2);
+    } else if (input.startsWith("0")) {
+      input = input.substring(1);
+    }
+
+    // Step 2: Now ensure input starts with mobile prefix like 9xx
+    if (!input.startsWith("9")) {
+
+      setPhone("+63");
+      return;
+    }
+
+    // Step 3: Limit to 10 digits (standard mobile number after 9xx)
+    if (input.length > 10) {
+      input = input.substring(0, 10);
+      toast.error("Phone number cannot exceed 10 digits");
+    }
+
+    // Step 4: Format as "+63 912 345 6789"
+    let formattedInput = "+63";
     if (input.length > 0) {
-      formattedInput = `+63 ${input.substring(0, 3)}`;
+      formattedInput += ` ${input.substring(0, 3)}`;
       if (input.length > 3) {
         formattedInput += ` ${input.substring(3, 6)}`;
       }
@@ -52,9 +73,6 @@ const Client = ({ user }: { user: Users | null }) => {
     }
 
     setPhone(formattedInput);
-    if (input.length > 16) {
-      toast.error("Phone number cannot exceed 16 characters.");
-    }
   };
 
   const handlePayment = async (event: React.FormEvent) => {
@@ -350,8 +368,7 @@ const Client = ({ user }: { user: Users | null }) => {
                   <span className="font-semibold">GCash</span>
                 </div>
                 <p className="text-xs lg:text-sm mt-2">
-                  Pay via GCash. Send payment to our GCash number or scan the QR
-                  code.
+                  Pay via GCash. Send payment to our GCash number and upload the proof of payment.
                 </p>
                 <Button
                   type="button"
@@ -385,8 +402,7 @@ const Client = ({ user }: { user: Users | null }) => {
                   </span>
                 </div>
                 <p className="text-xs lg:text-sm mt-2">
-                  Pay via Maya. Send payment to our Maya number or scan the QR
-                  code.
+                  Pay via Maya. Send payment to our Maya number or scan the QR code and upload the proof of payment.
                 </p>
                 <Button
                   type="button"
@@ -405,7 +421,8 @@ const Client = ({ user }: { user: Users | null }) => {
 
           <Textarea
             className="mt-4 mb-4"
-            placeholder="Message to the Admin (e.g. Allergies, with candles, etc.)"
+            placeholder="Message to the Admin (e.g. Allergies, with candles, etc.) - up to 200 characters"
+            maxLength={200}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />

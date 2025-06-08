@@ -145,7 +145,7 @@ const Navigation = () => {
       {/* Buttons */}
       <div className="flex items-center">
         {user ? (
-          <UserButton showName />
+          <UserButton />
         ) : (
           <Button
             className="bg-[#C3DCAA] hover:bg-[#C3DCAA]/80 text-black"
