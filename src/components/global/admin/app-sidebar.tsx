@@ -75,10 +75,6 @@ const data = {
       url: "#",
       items: [
         {
-          title: "Manage Staff",
-          url: "/admin/manage-staff",
-        },
-        {
           title: "Settings",
           url: "/admin/settings",
         },
